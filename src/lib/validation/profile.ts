@@ -1,6 +1,6 @@
 import { ActionResponse } from "@/types/api";
 import { z } from "zod";
-import { addOfflineRelativeApi, createProfileApi } from "../api/profile";
+import { addOfflineRelativeApi, addOnlineRelativeApi, createProfileApi } from "../api/profile";
 
 
 export async function createProfile(
@@ -31,6 +31,28 @@ export async function createProfile(
 
     const data = parse.data
     return createProfileApi(data);
+}
+
+
+export async function addOnlineRelative(
+    prevState: ActionResponse,
+    formData: FormData
+): Promise<ActionResponse> {
+    const schema = z.object({
+        relative_id: z.string().nonempty("First name cannot be empty"),
+        relation_id: z.string().nonempty("Last name cannot be empty"),
+    });
+    const parse = schema.safeParse({
+        relative_id: formData.get("relative-id"),
+        relation_id: formData.get("relative-relations"),
+    });
+    if (!parse.success) {
+        return {
+            errors: parse.error.errors,
+        };
+    }
+    const data = parse.data;
+    return addOnlineRelativeApi(data);
 }
 
 

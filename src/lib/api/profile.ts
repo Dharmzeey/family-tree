@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, CREATE_PROFILE, FETCH_RELATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
 import { handleErrorsResponse } from "@/types/responseHandler";
 
 export async function fetchRelationsApi() {
@@ -12,7 +12,7 @@ export async function fetchRelationsApi() {
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`
             },
-
+            cache: "force-cache",
         });
         const responseBody = await response.json();
         switch (response.status) {
@@ -128,10 +128,10 @@ export async function viewRelativesApi() {
 }
 
 
-export async function addOfflineRelativeApi(data: any) {
+export async function addOnlineRelativeApi(data: { relative_id: string, relation_id: string }) {
     try {
         const token = await fetchAccessTokenCookie();
-        const response = await fetch(ADD_OFFLINE_RELATIVE, {
+        const response = await fetch(ADD_ONLINE_RELATIVES, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`,
@@ -148,7 +148,45 @@ export async function addOfflineRelativeApi(data: any) {
                 }
             case 401:
                 return { error: responseBody.detail, status: 401 }
-            case 409: 
+            case 409:
+                return { error: responseBody.error, status: 409 }
+            case 400:
+                return { error: responseBody.error, status: 400 }
+            case 201:
+                return {
+                    data: responseBody.data, status: 201, message: responseBody.message
+                }
+            default: {
+                return { error: "Failed to add online relative" }
+            }
+        }
+
+    } catch (error) {
+        return { error: `An error occured while adding online relative` }
+    }
+}
+
+
+export async function addOfflineRelativeApi(data: any) {
+    try {
+        const token = await fetchAccessTokenCookie();
+        const response = await fetch(ADD_OFFLINE_RELATIVE, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token?.value || ""}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data),
+        })
+        const responseBody = await response.json();
+        switch (response.status) {
+            case 404:
+                return {
+                    error: responseBody.error, status: 404
+                }
+            case 401:
+                return { error: responseBody.detail, status: 401 }
+            case 409:
                 return { error: responseBody.error, status: 409 }
             case 201:
                 return {

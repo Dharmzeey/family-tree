@@ -7,4 +7,5 @@ type ProfileData = {
     picture: string;
 };
 
+
 export type {ProfileData}

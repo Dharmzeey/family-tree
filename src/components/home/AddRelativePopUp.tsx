@@ -1,21 +1,22 @@
-"use client";
+'use client'
 
-import { useActionState, useEffect, useState } from "react";
-import { EditableInputFIeld, EditableSelectField } from "../ui/input";
 import { fetchRelationsApi } from "@/lib/api/profile";
 import { RelationData } from "@/types/relatives";
 import { redirect } from "next/navigation";
-import { addOfflineRelative } from "@/lib/validation/profile";
+import { useActionState, useEffect, useState } from "react"
 import { ZodIssue } from "zod";
+import { EditableSelectField } from "../ui/input";
+import { addOnlineRelative } from "@/lib/validation/profile";
+import { ProfileData } from "@/types/profile";
 import { SubmitButton } from "../ui/button";
 
 const initialState = {
     message: ""
 }
 
-export default function RelativeForm() {
+export default function AddOnlineRelativePopUp(relative: { profile: ProfileData }) {
     const [relations, setRelations] = useState<RelationData[]>();
-    const [formState, formAction] = useActionState(addOfflineRelative, initialState);
+    const [formState, formAction] = useActionState(addOnlineRelative, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
     useEffect(() => {
         async function getRelations() {
@@ -32,37 +33,19 @@ export default function RelativeForm() {
     useEffect(() => {
         setErrors(formState.errors)
     }, [formState])
-    
+
 
     const getErrorForField = (fieldName: string) => {
         return errors?.filter((error) => error.path.includes(fieldName)).map((error) => error.message).join(', '); // Combines multiple messages if any
     };
 
+
     return (
         <>
-            <div className="bg-[#ffffff0a] shadow-xl backdrop-blur-md w-9/12 lg:w-1/2 py-8 px-4 rounded-2xl">
-                <form action={formAction} className="flex flex-col justify-center items-center w-full">
-                    <h2 className="text-2xl">Add Offilne Relatives</h2>
-                    <EditableInputFIeld
-                        inputFor="first-name"
-                        inputText="Relative First Name"
-                        inputType="text"
-                        inputName="first-name"
-                        inputId="first-name"
-                        placeholder="Input Relative First Name"
-                        required
-                        error={getErrorForField('relative_first_name')}
-                    />
-                    <EditableInputFIeld
-                        inputFor="last-name"
-                        inputText="Relative Last Name"
-                        inputType="text"
-                        inputName="last-name"
-                        inputId="last-name"
-                        placeholder="Input Relative Last Name"
-                        required
-                        error={getErrorForField('relative_last_name')}
-                    />
+            <div className="absolute w-full bg-black p-4">
+                <form action={formAction}>
+                    <div>How is {relative.profile.first_name} Related to you</div>
+                    <input type="hidden" name="relative-id" value={relative.profile.id}/>
                     <EditableSelectField
                         label="Relative Relation"
                         name="relative-relations"

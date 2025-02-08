@@ -9,7 +9,7 @@ type RelativeProps = {
 
 function RelativeCard({ relative, style, parent }: RelativeProps) {
     return (
-        <div className="flex items-center gap-2.5 bg-slate-500 rounded-lg p-2.5 shadow-sm w-[17%] z-50" style={style}>
+        <div className="flex items-center gap-2.5 bg-slate-500 rounded-lg p-2.5 shadow-sm w-[17%] z-20" style={style}>
             <div id={`relative-dot-${relative.id}`} className={`w-2 h-2 absolute bg-[#54585f] rounded-lg ${parent ? "-right-1" : "-left-1 "}`}></div>
             <div className="flex items-center gap-2">
                 <Image src={relative.picture} alt={`${relative.first_name} ${relative.last_name}`} width={150} height={150} className="rounded-full w-14 h-14" />
