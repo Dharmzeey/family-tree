@@ -49,25 +49,13 @@ export async function verifyCodeApi(data: PinVerificationData): Promise<ApiRespo
 
             body: JSON.stringify(data),
         });
-        switch (response.status) {
-            case 401:
-                return {
-                    error:
-                        "Unauthorized access request token again, this is for developer to re-fresh refresh token or ensure token is sent", status: 401
-                };
-            case 410:
-                return { error: "Verification Pin Expired" };
-            case 403:
-                return { error: "Invalid PIN" };
-            case 404:
-                return { error: "PIN has not been sent" };
-            case 400:
-                return { error: "Invalid PIN input" };
-            case 200:
-                return { message: "Email verified successfully", status: 200 };
-            default:
-                return { error: "Email verification failed" };
-        }
+        const responseBody = await response.json();
+        return {
+            data: responseBody.data || null,
+            error: responseBody.error || responseBody.detail || null,
+            message: responseBody.message || null,
+            status: response.status,
+        };
     } catch (error) {
         return { message: "An error occurred during pin verification." };
     }
@@ -83,18 +71,13 @@ export async function resendEmailVerificationApi(): Promise<ApiResponse> {
                 Authorization: `Bearer ${token?.value || ""}`,
             },
         });
-        switch (response.status) {
-            case 201:
-                return { message: "Email has already been verified", status: 201 };
-            case 409:
-                return { error: "Email Verification already sent" };
-            case 200:
-                return { message: "verification PIN sent to email." };
-            case 401:
-                return { error: "You need to login first", status: 401 };
-            default:
-                return { message: "Email request failed" };
-        }
+        const responseBody = await response.json();
+        return {
+            data: responseBody.data || null,
+            error: responseBody.error || responseBody.detail || null,
+            message: responseBody.message || null,
+            status: response.status,
+        };
     } catch (error) {
         return { error: "An error occurred during PIN request." };
     }
@@ -124,7 +107,7 @@ export async function loginUserApi(data: LoginUserData): Promise<ApiResponse> {
                 // const refresh_token = responseBody.refresh_token;
                 await handleAccessToken(access_token);
                 // handleRefreshToken(refresh_token);
-                return { message: "Login successful",status: 200 };
+                return { message: "Login successful", status: 200 };
             default:
                 return { error: "Failed to Log user in." };
         }
@@ -206,7 +189,7 @@ export async function createNewPasswordApi(data: CreateNewPasswordData): Promise
             case 403:
                 return { error: `${responseBody.error}` }
             case 200:
-                return { message: "Password changed successfully", status:200 }
+                return { message: "Password changed successfully", status: 200 }
             case 404:
                 return { error: "User information is not found" }
             case 400:

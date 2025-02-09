@@ -3,8 +3,10 @@
 import { fetchAccessTokenCookie } from "@/utils/cookies";
 import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
 import { handleErrorsResponse } from "@/types/responseHandler";
+import { handleApiResponse } from "@/utils/apiResponse";
+import { ApiResponse } from "@/types/api";
 
-export async function fetchRelationsApi() {
+export async function fetchRelationsApi(): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(FETCH_RELATIONS, {
@@ -14,23 +16,16 @@ export async function fetchRelationsApi() {
             },
             cache: "force-cache",
         });
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 200:
-                return { message: responseBody.message, data: responseBody }
-            default:
-                return { error: "Failed to fetch relations." };
-        }
+        // Generic response handler
+        return handleApiResponse(response)
     }
     catch (error) {
-        return { error: `An error occurred while fetching relations. ${error}` };
+        return { error: `An error occurred while fetching relations.` };
     }
 }
 
 
-export async function createProfileApi(data: any) {
+export async function createProfileApi(data: any): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         // Create FormData object
@@ -49,7 +44,7 @@ export async function createProfileApi(data: any) {
             },
             body: formData,
         });
-        const responseBody = await response.json();
+        const responseBody = await response.json()
         switch (response.status) {
             case 401:
                 return { error: responseBody.detail, status: 401 }
@@ -63,12 +58,12 @@ export async function createProfileApi(data: any) {
                 return { error: responseBody.errors };
         }
     } catch (error) {
-        return { error: `An error occurred while creating profile. ${error}` };
+        return { error: `An error occurred while creating profile.` };
     }
 }
 
 
-export async function fetchProfileApi() {
+export async function fetchProfileApi(): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(VIEW_PROFILE, {
@@ -78,24 +73,14 @@ export async function fetchProfileApi() {
             },
             cache: "force-cache",
         });
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 404:
-                return { error: "Profile does not exist.", status: 404 };
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 200:
-                return { message: responseBody.message, data: responseBody.data, status: 200 }
-            default:
-                return { error: "Failed to fetch profile." };
-        }
+        return handleApiResponse(response)
     } catch (error) {
-        return { error: `An error occurred while fetching profile. ${error}` };
+        return { error: `An error occurred while fetching profile.` };
     }
 }
 
 
-export async function viewRelativesApi() {
+export async function viewRelativesApi(): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(VIEW_RELATIVES, {
@@ -105,22 +90,7 @@ export async function viewRelativesApi() {
             },
             // cache: "force-cache",
         })
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 404:
-                return {
-                    error: responseBody.error, status: 404
-                }
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 200:
-                return {
-                    data: responseBody.data, status: 200
-                }
-            default: {
-                return { error: "Failed to fetch relatives" }
-            }
-        }
+        return handleApiResponse(response)
 
     } catch (error) {
         return { error: `An error occured while fetching relatives` }
@@ -128,7 +98,10 @@ export async function viewRelativesApi() {
 }
 
 
-export async function addOnlineRelativeApi(data: { relative_id: string, relation_id: string }) {
+export async function addOnlineRelativeApi(
+    data: { relative_id: string, relation_id: string }
+)
+    : Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(ADD_ONLINE_RELATIVES, {
@@ -139,27 +112,7 @@ export async function addOnlineRelativeApi(data: { relative_id: string, relation
             },
             body: JSON.stringify(data),
         })
-        const responseBody = await response.json();
-        console.log(responseBody)
-        switch (response.status) {
-            case 404:
-                return {
-                    error: responseBody.error, status: 404
-                }
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 409:
-                return { error: responseBody.error, status: 409 }
-            case 400:
-                return { error: responseBody.error, status: 400 }
-            case 201:
-                return {
-                    data: responseBody.data, status: 201, message: responseBody.message
-                }
-            default: {
-                return { error: "Failed to add online relative" }
-            }
-        }
+        return handleApiResponse(response)
 
     } catch (error) {
         return { error: `An error occured while adding online relative` }
@@ -167,7 +120,7 @@ export async function addOnlineRelativeApi(data: { relative_id: string, relation
 }
 
 
-export async function addOfflineRelativeApi(data: any) {
+export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(ADD_OFFLINE_RELATIVE, {
@@ -178,32 +131,15 @@ export async function addOfflineRelativeApi(data: any) {
             },
             body: JSON.stringify(data),
         })
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 404:
-                return {
-                    error: responseBody.error, status: 404
-                }
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 409:
-                return { error: responseBody.error, status: 409 }
-            case 201:
-                return {
-                    data: responseBody.data, status: 201, message: responseBody.message
-                }
-            default: {
-                return { error: "Failed to add offline relative" }
-            }
-        }
+        return handleApiResponse(response)
 
     } catch (error) {
-        return { error: `An error occured while adding offline relative` }
+        return { error: `An error occured while adding offline relative`, status: 500 }
     }
 }
 
 
-export async function searchRelativeApi(query: string) {
+export async function searchRelativeApi(query: string): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(SEARCH_RELATIVES(query), {
@@ -213,22 +149,7 @@ export async function searchRelativeApi(query: string) {
                 "Content-Type": "application/json"
             },
         })
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 404:
-                return {
-                    error: responseBody.error, status: 404
-                }
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 200:
-                return {
-                    data: responseBody.results, status: 200, next: responseBody.next, previous: responseBody.previous
-                }
-            default: {
-                return { error: "Failed to search relative" }
-            }
-        }
+        return handleApiResponse(response)
 
     } catch (error) {
         return { error: `An error occured while searching relative` }
