@@ -42,7 +42,7 @@ export default function AddOnlineRelativePopUp(relative: { profile: ProfileData 
 
     return (
         <>
-            <div className="absolute w-full bg-black p-4">
+            <div className="absolute w-full bg-black p-4 z-20">
                 <form action={formAction}>
                     <div>How is {relative.profile.first_name} Related to you</div>
                     <input type="hidden" name="relative-id" value={relative.profile.id}/>

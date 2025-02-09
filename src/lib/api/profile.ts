@@ -2,9 +2,9 @@
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
 import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
-import { handleErrorsResponse } from "@/types/responseHandler";
-import { handleApiResponse } from "@/utils/apiResponse";
-import { ApiResponse } from "@/types/api";
+// import { handleErrorsResponse } from "@/types/responseHandler";
+import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
+import { ApiResponse, PaginatedApiResponse } from "@/types/api";
 
 export async function fetchRelationsApi(): Promise<ApiResponse> {
     try {
@@ -44,19 +44,7 @@ export async function createProfileApi(data: any): Promise<ApiResponse> {
             },
             body: formData,
         });
-        const responseBody = await response.json()
-        switch (response.status) {
-            case 401:
-                return { error: responseBody.detail, status: 401 }
-            case 409:
-                return { error: responseBody.error, status: 409 }
-            case 400:
-                return handleErrorsResponse(responseBody)
-            case 201:
-                return { message: responseBody.message, data: responseBody.data }
-            default:
-                return { error: responseBody.errors };
-        }
+        return handleApiResponse(response)
     } catch (error) {
         return { error: `An error occurred while creating profile.` };
     }
@@ -139,17 +127,17 @@ export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
 }
 
 
-export async function searchRelativeApi(query: string): Promise<ApiResponse> {
+export async function searchRelativeApi(query: string, page?: string): Promise<PaginatedApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
-        const response = await fetch(SEARCH_RELATIVES(query), {
+        const response = await fetch(SEARCH_RELATIVES(query, page), {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`,
                 "Content-Type": "application/json"
             },
         })
-        return handleApiResponse(response)
+        return handlePaginatedApiResponse(response)
 
     } catch (error) {
         return { error: `An error occured while searching relative` }

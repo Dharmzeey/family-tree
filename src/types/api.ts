@@ -14,5 +14,9 @@ interface ActionResponse extends ApiResponse {
     errors?: ZodIssue[];
 }
 
+interface PaginatedApiResponse extends ApiResponse {
+    pagination?: Pagination;
+}
 
-export type { ApiResponse,  ActionResponse }
+
+export type { ApiResponse,  ActionResponse, PaginatedApiResponse }

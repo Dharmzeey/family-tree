@@ -9,6 +9,9 @@ export default function Sidebar() {
                         <Link href="/">Home</Link>
                     </li>
                     <li>
+                        <Link href="/notifications">Notifications</Link>
+                    </li>
+                    <li>
                         <Link href="/relatives">View Relatives</Link>
                     </li>
                     <li>

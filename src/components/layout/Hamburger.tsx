@@ -13,7 +13,6 @@ export default function HamburgerMenu() {
                 <button
                     className="fixed top-4 left-4 p-d2 text-white z-50"
                     onClick={() => {
-                        console.log("clicked");
                         setIsSidebarOpen(!isSidebarOpen);
                     }}
                 >

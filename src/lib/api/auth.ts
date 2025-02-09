@@ -4,7 +4,8 @@ import { ApiResponse } from "@/types/api";
 import { SIGNUP, CONFIRM_EMAIL_VERIFICATION, SEND_EMAIL_VERIFICATION, LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, CREATE_NEW_PASSWORD } from "../endpoints/auth";
 import { CreateUserData, PinVerificationData, LoginUserData, ForgotPasswordData, ResetPasswordPinData, CreateNewPasswordData } from "@/types/auth";
 import { handleAccessToken, fetchAccessTokenCookie, removeAllTokens } from "@/utils/cookies";
-import { handleErrorsResponse } from "@/types/responseHandler";
+// import { handleErrorsResponse } from "@/types/responseHandler";
+import { handleApiResponse } from "@/utils/apiResponse";
 
 
 export async function createUserApi(data: CreateUserData): Promise<ApiResponse> {
@@ -49,13 +50,7 @@ export async function verifyCodeApi(data: PinVerificationData): Promise<ApiRespo
 
             body: JSON.stringify(data),
         });
-        const responseBody = await response.json();
-        return {
-            data: responseBody.data || null,
-            error: responseBody.error || responseBody.detail || null,
-            message: responseBody.message || null,
-            status: response.status,
-        };
+        return handleApiResponse(response)
     } catch (error) {
         return { message: "An error occurred during pin verification." };
     }
@@ -71,13 +66,7 @@ export async function resendEmailVerificationApi(): Promise<ApiResponse> {
                 Authorization: `Bearer ${token?.value || ""}`,
             },
         });
-        const responseBody = await response.json();
-        return {
-            data: responseBody.data || null,
-            error: responseBody.error || responseBody.detail || null,
-            message: responseBody.message || null,
-            status: response.status,
-        };
+        return handleApiResponse(response)
     } catch (error) {
         return { error: "An error occurred during PIN request." };
     }
@@ -125,19 +114,7 @@ export async function forgotPasswordApi(data: ForgotPasswordData): Promise<ApiRe
             },
             body: JSON.stringify(data),
         });
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 200:
-                return { message: "Password reset PIN sent to email", token: responseBody.reset_token, status: 200 };
-            case 409:
-                return { error: "password reset PIN already sent" };
-            case 404:
-                return { error: "User information not found" };
-            case 400:
-                return handleErrorsResponse(responseBody) // this will help concatenate the errors into str 
-            default:
-                return { error: "Email request failed" };
-        }
+        return handleApiResponse(response)
     } catch (error) {
         return { error: "An error occurred during PIN request." };
     }
@@ -154,21 +131,7 @@ export async function verifyResetCodeApi(data: ResetPasswordPinData): Promise<Ap
 
             body: JSON.stringify(data),
         });
-        const responseBody = await response.json();
-        switch (response.status) {
-            case 401:
-                return { error: "Password reset PIN expired" };
-            case 403:
-                return { error: responseBody.error };
-            case 404:
-                return { error: "password reset PIN has not been sent" };
-            case 400:
-                return handleErrorsResponse(responseBody) // this will help concatenate the errors into str 
-            case 200:
-                return { message: "Password reset PIN verified successfully", token: responseBody.reset_token, status: 200 };
-            default:
-                return { error: "Email verification failed" };
-        }
+        return handleApiResponse(response)
     } catch (error) {
         return { error: "An error occurred during pin verification." };
     }
@@ -184,19 +147,7 @@ export async function createNewPasswordApi(data: CreateNewPasswordData): Promise
             },
             body: JSON.stringify(data)
         });
-        const responseBody = await response.json()
-        switch (response.status) {
-            case 403:
-                return { error: `${responseBody.error}` }
-            case 200:
-                return { message: "Password changed successfully", status: 200 }
-            case 404:
-                return { error: "User information is not found" }
-            case 400:
-                return handleErrorsResponse(responseBody)
-            default:
-                return { error: "Password reset failed" };
-        }
+        return handleApiResponse(response)
     } catch (error) {
         return { error: "An error occurred during password reset" };
     }
