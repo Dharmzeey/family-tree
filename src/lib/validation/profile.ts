@@ -25,7 +25,7 @@ export async function createProfile(
 
     if (!parse.success){
         return {
-            errors: parse.error.errors
+            zodErrors: parse.error.errors
         }
     }
 
@@ -48,7 +48,7 @@ export async function addOnlineRelative(
     });
     if (!parse.success) {
         return {
-            errors: parse.error.errors,
+            zodErrors: parse.error.errors,
         };
     }
     const data = parse.data;
@@ -72,7 +72,7 @@ export async function addOfflineRelative(
     });
     if (!parse.success) {
         return {
-            errors: parse.error.errors,
+            zodErrors: parse.error.errors,
         };
     }
     const data = parse.data;

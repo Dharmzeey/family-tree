@@ -117,7 +117,7 @@ export default function Relatives() {
                             {relatives.filter(relative => relative.relation !== 'Father' && relative.relation !== 'Mother').map((relative, index) => {
                                 const columnIndex = Math.floor(index / 5);
                                 const rowIndex = index % 5;
-                                const leftPosition = columnIndex === 0 ? '50%' : '75%';
+                                const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '75%' : '100%');
                                 const topPosition = `${15 + rowIndex * 15}%`;
 
                                 return (

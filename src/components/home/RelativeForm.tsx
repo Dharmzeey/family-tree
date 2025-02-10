@@ -30,7 +30,7 @@ export default function RelativeForm() {
     }, [])
 
     useEffect(() => {
-        setErrors(formState.errors)
+        setErrors(formState.zodErrors)
     }, [formState])
     
 

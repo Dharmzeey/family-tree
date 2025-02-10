@@ -1,17 +1,17 @@
 import { ZodIssue } from "zod";
 
 interface ApiResponse<T = any> {
+    // This is typical of the api response from the BE server
     status?: number;
     message?: string;
-    token?: string;
-    error?: string;
+    token?: string | null;
+    error?: string | null;
     data?: T;
-    fieldErrors?: {};
 };
 
-
 interface ActionResponse extends ApiResponse {
-    errors?: ZodIssue[];
+    // This adds zod error to the api response
+    zodErrors?: ZodIssue[];
 }
 
 interface PaginatedApiResponse extends ApiResponse {
@@ -20,3 +20,4 @@ interface PaginatedApiResponse extends ApiResponse {
 
 
 export type { ApiResponse,  ActionResponse, PaginatedApiResponse }
+

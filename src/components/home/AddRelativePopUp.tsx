@@ -31,7 +31,7 @@ export default function AddOnlineRelativePopUp(relative: { profile: ProfileData 
     }, [])
 
     useEffect(() => {
-        setErrors(formState.errors)
+        setErrors(formState.zodErrors)
     }, [formState])
 
 

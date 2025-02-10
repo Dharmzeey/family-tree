@@ -28,7 +28,7 @@ export default function SignupPage() {
 	}, [state, router]);
 
 	useEffect(() => {
-		setErrors(state.errors)
+		setErrors(state.zodErrors)
 	}, [state])
 
 	const getErrorForField = (fieldName: string) => {

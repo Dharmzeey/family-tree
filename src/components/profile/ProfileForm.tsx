@@ -17,7 +17,7 @@ export default function ProfileForm() {
     const router = useRouter();
 
     useEffect(() => {
-        setErrors(state.errors);
+        setErrors(state.zodErrors);
         
         if (state.status === 201 || state.status === 409) {
             setTimeout(() => {

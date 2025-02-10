@@ -33,7 +33,7 @@ export async function createUser(
 
   if (!parse.success) {
     return {
-      errors: parse.error.errors,
+      zodErrors: parse.error.errors,
     };
   }
 
@@ -55,7 +55,7 @@ export async function verifyCode(
 
   if (!parse.success) {
     return {
-      errors: parse.error.errors,
+      zodErrors: parse.error.errors,
     };
   }
   const data = parse.data;
@@ -81,7 +81,7 @@ export async function loginUser(
 
   if (!parse.success) {
     return {
-      errors: parse.error.errors,
+      zodErrors: parse.error.errors,
     };
   }
 
@@ -103,7 +103,7 @@ export async function forgotPassword(
 
   if (!parse.success) {
     return {
-      errors: parse.error.errors,
+      zodErrors: parse.error.errors,
     };
   }
 
@@ -129,7 +129,7 @@ export async function verifyResetCode(
 
   if (!parse.success) {
     return {
-      errors: parse.error.errors,
+      zodErrors: parse.error.errors,
     };
   }
   const data = parse.data;
@@ -163,7 +163,7 @@ export async function createNewPassword(
 
   if (!parse.success) {
     return {
-      errors: parse.error.errors,
+      zodErrors: parse.error.errors,
     };
   }
   const data = parse.data;

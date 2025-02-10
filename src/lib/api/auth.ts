@@ -6,6 +6,7 @@ import { CreateUserData, PinVerificationData, LoginUserData, ForgotPasswordData,
 import { handleAccessToken, fetchAccessTokenCookie, removeAllTokens } from "@/utils/cookies";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse } from "@/utils/apiResponse";
+import { handleErrorsResponse } from "@/types/responseHandler";
 
 
 export async function createUserApi(data: CreateUserData): Promise<ApiResponse> {
@@ -91,6 +92,8 @@ export async function loginUserApi(data: LoginUserData): Promise<ApiResponse> {
                 return {
                     error: "User does not exists",
                 };
+            case 400:
+                return { error: handleErrorsResponse(responseBody) }
             case 200:
                 const access_token = responseBody.access_token;
                 // const refresh_token = responseBody.refresh_token;

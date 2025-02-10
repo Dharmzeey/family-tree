@@ -1,8 +1,10 @@
+import { handleErrorsResponse } from "@/types/responseHandler";
+
 export async function handleApiResponse(response: Response) {
     const responseBody = await response.json();
     return {
         data: responseBody.data || null,
-        error: responseBody.error || responseBody.detail || null,
+        error: responseBody.error || responseBody.detail || handleErrorsResponse(responseBody) || null,
         message: responseBody.message || null,
         status: response.status,
     };

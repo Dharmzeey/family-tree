@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
 import { ApiResponse, PaginatedApiResponse } from "@/types/api";
@@ -108,6 +108,23 @@ export async function addOnlineRelativeApi(
 }
 
 
+export async function getNotificationsApi(): Promise<ApiResponse> { 
+    try {
+        const token = await fetchAccessTokenCookie();
+        const response = await fetch(GET_NOTIFICATIONS, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token?.value || ""}`
+            },
+        })
+        return handleApiResponse(response)
+
+    } catch (error) {
+        return { error: `An error occured while fetching notifications` }
+    }
+}
+
+
 export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
@@ -119,7 +136,8 @@ export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
             },
             body: JSON.stringify(data),
         })
-        return handleApiResponse(response)
+        const ami= await handleApiResponse(response)
+        return ami
 
     } catch (error) {
         return { error: `An error occured while adding offline relative`, status: 500 }

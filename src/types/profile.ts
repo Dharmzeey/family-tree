@@ -7,5 +7,11 @@ type ProfileData = {
     picture: string;
 };
 
+type NotificationData = {
+    id: string;
+    lineage_name: string;
+    sender: string;
+    relation: string;
+};
 
-export type {ProfileData}
+export type { ProfileData, NotificationData }
