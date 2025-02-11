@@ -8,4 +8,5 @@ export const VIEW_RELATIVES = `${BASE_URL}/profiles/relatives/`;
 export const SEARCH_RELATIVES = (query: string, page?: string)=> `${BASE_URL}/profiles/relatives/search/?query=${query}${page ? `&page=${page}` : ''}`;
 export const ADD_ONLINE_RELATIVES = `${BASE_URL}/profiles/relation/create/`;
 export const GET_NOTIFICATIONS = `${BASE_URL}/profiles/bond-notifications/`;
+export const PROCESS_NOTIFICATIONS = `${BASE_URL}/profiles/process-bond-notifications/`;
 export const ADD_OFFLINE_RELATIVE = `${BASE_URL}/profiles/offline-relatives/`;

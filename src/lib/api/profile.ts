@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
 import { ApiResponse, PaginatedApiResponse } from "@/types/api";
@@ -108,7 +108,7 @@ export async function addOnlineRelativeApi(
 }
 
 
-export async function getNotificationsApi(): Promise<ApiResponse> { 
+export async function getNotificationsApi(): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
         const response = await fetch(GET_NOTIFICATIONS, {
@@ -124,6 +124,24 @@ export async function getNotificationsApi(): Promise<ApiResponse> {
     }
 }
 
+export async function processNotificationApi(data: { bond_request_id: string, accept: boolean }): Promise<ApiResponse> {
+    try {
+        const token = await fetchAccessTokenCookie();
+        const response = await fetch(PROCESS_NOTIFICATIONS, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token?.value || ""}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        return handleApiResponse(response)
+
+    } catch (error) {
+        return { error: `An error occured while processing notifications` }
+    }
+}
+
 
 export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
     try {
@@ -136,8 +154,7 @@ export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
             },
             body: JSON.stringify(data),
         })
-        const ami= await handleApiResponse(response)
-        return ami
+        return handleApiResponse(response)
 
     } catch (error) {
         return { error: `An error occured while adding offline relative`, status: 500 }

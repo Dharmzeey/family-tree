@@ -9,7 +9,6 @@ type ActioButtonProp = {
     buttonText: string;
     onClick: () => void;
 }
-
 export function SubmitButton(buttonProp: SubmitButtonProp) {
     const { pending } = useFormStatus();
 
