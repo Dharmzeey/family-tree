@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
 import { ApiResponse, PaginatedApiResponse } from "@/types/api";
@@ -85,6 +85,23 @@ export async function viewRelativesApi(): Promise<ApiResponse> {
     }
 }
 
+export async function viewUserRelativesApi(id: string): Promise<ApiResponse> {
+    try {
+        const token = await fetchAccessTokenCookie();
+        const response = await fetch(VIEW_USER_RELATIVES(id), {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token?.value || ""}`
+            },
+            // cache: "force-cache",
+        })
+        return handleApiResponse(response)
+
+    } catch (error) {
+        return { error: `An error occured while fetching use relatives` }
+    }
+}
+
 
 export async function addOnlineRelativeApi(
     data: { relative_id: string, relation_id: string }
@@ -146,13 +163,21 @@ export async function processNotificationApi(data: { bond_request_id: string, ac
 export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('first_name', data.first_name);
+        formData.append('last_name', data.last_name);
+        formData.append("relation", data.relation);
+        // formData.append('lineage_name', data.lineage_name);
+        // formData.append('other_name', data.other_name);
+        formData.append('picture', data.picture);
+        console.log(formData)
         const response = await fetch(ADD_OFFLINE_RELATIVE, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`,
-                "Content-Type": "application/json"
             },
-            body: JSON.stringify(data),
+            body: formData,
         })
         return handleApiResponse(response)
 

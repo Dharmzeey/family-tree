@@ -14,7 +14,7 @@ export default function HandleRelativeSearch() {
 
     const handleSubmit = () => {
         if (searchTerm.trim()) {
-            router.push(`/relatives/search?query=${encodeURIComponent(searchTerm)}`)
+            router.replace(`/relatives/search?query=${encodeURIComponent(searchTerm)}`)
         }
     }
 

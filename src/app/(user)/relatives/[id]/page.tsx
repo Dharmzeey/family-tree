@@ -1,16 +1,23 @@
 'use client';
 import RelativeCard from "@/components/home/RelativeCard";
 import UserCard from "@/components/profile/userCard";
-import { viewRelativesApi } from "@/lib/api/profile";
+import { viewRelativesApi, viewUserRelativesApi } from "@/lib/api/profile";
 // import useUserStore from "@/stores/userStore";
 import { ProfileData } from "@/types/profile";
 import { RelativesData } from "@/types/relatives";
 import { redirect } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
-export default function Relatives() {
+type Props = {
+    params: {
+        id: string;
+    }
+}
+
+export default function UserRelatives({ params }: Props) {
     // const { user, initialize } = useUserStore();
     const [user, setUser] = useState<ProfileData>()
+    const [error, setError] = useState<string | null | undefined>()
     const [relatives, setRelatives] = useState<RelativesData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const userCardRef = useRef<HTMLDivElement>(null);
@@ -21,17 +28,17 @@ export default function Relatives() {
 
     useEffect(() => {
         async function getRelatives() {
-            const fetchRelatives = await viewRelativesApi();
+            const { id } = await params;
+            const fetchRelatives = await viewUserRelativesApi(id);
             if (fetchRelatives.status === 401) {
                 redirect('/login');
-            } else if (fetchRelatives.status === 404 && fetchRelatives.error === "User profile does not exist. Please create a profile first.") {
-                redirect('/profile/create');
             } else if (fetchRelatives.status === 200) {
                 const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);
                 setUser(fetchRelatives.data.user)
                 setRelatives(allRelatives);
                 setLoading(false);
             }
+            setError(fetchRelatives.error)
             setLoading(false);
         }
         getRelatives();
@@ -102,36 +109,40 @@ export default function Relatives() {
         <>
             <div className="relative min-w-[1200px] flex justify-center items-center content-center flex-wrap gap-3 " ref={userCardRef}>
                 {
-                    loading || !user ? (
+                    loading ? (
                         <h1>Loading...</h1>
-                    ) : (
-                        <>
-                            {
-                                relatives.length > 1 && <div className="absolute left-[30%]">
-                                    <UserCard user={user} />
-                                </div>
-                            }
-                            {relatives.filter(relative => relative.relation === 'Father').map((relative) => (
-                                <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '20%' }} parent={true} />
-                            ))}
-                            {relatives.filter(relative => relative.relation === 'Mother').map((relative) => (
-                                <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '70%' }} parent={true} />
-                            ))}
-                            {relatives.filter(relative => relative.relation !== 'Father' && relative.relation !== 'Mother').map((relative, index) => {
-                                const columnIndex = Math.floor(index / 5);
-                                const rowIndex = index % 5;
-                                const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '75%' : '100%');
-                                const topPosition = `${15 + rowIndex * 15}%`;
+                    ) :
+                        !user ?
+                            <h1>{error}</h1>
+                            :
+                            (
+                                <>
+                                    {
+                                        relatives.length > 1 && <div className="absolute left-[30%]">
+                                            <UserCard user={user} />
+                                        </div>
+                                    }
+                                    {relatives.filter(relative => relative.relation === 'Father').map((relative) => (
+                                        <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '20%' }} parent={true} />
+                                    ))}
+                                    {relatives.filter(relative => relative.relation === 'Mother').map((relative) => (
+                                        <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '70%' }} parent={true} />
+                                    ))}
+                                    {relatives.filter(relative => relative.relation !== 'Father' && relative.relation !== 'Mother').map((relative, index) => {
+                                        const columnIndex = Math.floor(index / 5);
+                                        const rowIndex = index % 5;
+                                        const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '75%' : '100%');
+                                        const topPosition = `${15 + rowIndex * 15}%`;
 
-                                return (
-                                    <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: leftPosition, top: topPosition }} />
-                                );
-                            })}
-                            {relatives.length < 1 && (
-                                <h1>You have no associated relatives, but you can add or search for relatives</h1>
-                            )}
-                        </>
-                    )
+                                        return (
+                                            <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: leftPosition, top: topPosition }} />
+                                        );
+                                    })}
+                                    {relatives.length < 1 && (
+                                        <h1>You have no associated relatives, but you can add or search for relatives</h1>
+                                    )}
+                                </>
+                            )
                 }
             </div>
         </>

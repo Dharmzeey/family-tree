@@ -2,6 +2,7 @@ import { handleErrorsResponse } from "@/types/responseHandler";
 
 export async function handleApiResponse(response: Response) {
     const responseBody = await response.json();
+    console.log(responseBody)
     return {
         data: responseBody.data || null,
         error: responseBody.error || responseBody.detail || handleErrorsResponse(responseBody) || null,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { EditableInputFIeld, EditableSelectField } from "../ui/input";
+import { EditableInputFIeld, EditableSelectField, ImageInputField } from "../ui/input";
 import { fetchRelationsApi } from "@/lib/api/profile";
 import { RelationData } from "@/types/relatives";
 import { redirect } from "next/navigation";
@@ -69,6 +69,15 @@ export default function RelativeForm() {
                         id="relative-relations"
                         data={relations}
                         error={getErrorForField('relation')}
+                    />
+                    <ImageInputField
+                        inputFor="picture"
+                        inputText="Picture"
+                        inputType="file"
+                        inputId="picture"
+                        inputName="picture"
+                        placeholder="Upload your Profile Picture"
+                        error={getErrorForField("picture")}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD RELATIVE" />
                     {formState.error && (
