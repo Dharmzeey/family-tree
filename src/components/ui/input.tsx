@@ -46,8 +46,8 @@ type ViewInputProp = {
 function EditableInputFIeld(inputProp: EditInputProp) {
     return (
         <>
-            <div className="my-3 w-[min(80%,40rem)]">
-                <label htmlFor={inputProp.inputFor} className="text-sm font-medium">{inputProp.inputText}</label>
+            <div className="my-2 w-[min(80%,40rem)]">
+                <label htmlFor={inputProp.inputFor} className="text-sm font-medium">{inputProp.inputText}</label> {inputProp.required && <span className="text-red-600 text-xl">*</span>}
                 <br />
                 <input
                     type={inputProp.inputType}
@@ -73,8 +73,8 @@ function EditableInputFIeld(inputProp: EditInputProp) {
 function ImageInputField(inputProp: EditInputProp) {
     return (
         <>
-            <div className="my-3">
-                <label htmlFor={inputProp.inputFor} className="text-sm font-medium">{inputProp.inputText}</label>
+            <div className="my-2 w-[min(80%,40rem)]">
+                <label htmlFor={inputProp.inputFor} className="text-sm font-medium">{inputProp.inputText}</label> {inputProp.required && <span className="text-red-600 text-xl">*</span>}
                 <br />
                 <input
                     type={inputProp.inputType}
@@ -127,8 +127,8 @@ function EditableTextAreaFIeld(inputProp: EditTextAreaProp) {
 function EditableSelectField(inputProp: EditSelectProp) {
     return (
         <>
-            <div className="my-3 w-[min(80%,40rem)]">
-                <label htmlFor={inputProp.name}>{inputProp.label}</label>
+            <div className="my-2 w-[min(80%,40rem)]">
+                <label htmlFor={inputProp.name}>{inputProp.label}</label> <span className="text-red-600 text-xl">*</span>
                 <select name={inputProp.name} id={inputProp.id} onChange={inputProp.handleStateChange} defaultValue={inputProp.defaultValue} className="px-2 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full rounded min-h-8 text-black" required >
                     <option value="">---</option>
                     {
