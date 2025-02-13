@@ -163,26 +163,28 @@ export async function processNotificationApi(data: { bond_request_id: string, ac
 export async function addOfflineRelativeApi(data: any): Promise<ApiResponse> {
     try {
         const token = await fetchAccessTokenCookie();
-        // Create FormData object
+
         const formData = new FormData();
         formData.append('first_name', data.first_name);
         formData.append('last_name', data.last_name);
-        formData.append("relation", data.relation);
-        // formData.append('lineage_name', data.lineage_name);
-        // formData.append('other_name', data.other_name);
-        formData.append('picture', data.picture);
-        console.log(formData)
+        formData.append('other_name', data.other_name);
+        formData.append('relation', data.relation);
+
+        // Append picture only if it exists
+        if (data.picture && data.picture.size > 0) {
+            formData.append('picture', data.picture);
+        }
+
         const response = await fetch(ADD_OFFLINE_RELATIVE, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`,
             },
             body: formData,
-        })
-        return handleApiResponse(response)
-
+        });
+        return handleApiResponse(response);
     } catch (error) {
-        return { error: `An error occured while adding offline relative`, status: 500 }
+        return { error: `An error occurred while adding offline relative`, status: 500 };
     }
 }
 

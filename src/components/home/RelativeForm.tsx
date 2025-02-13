@@ -63,6 +63,15 @@ export default function RelativeForm() {
                         required
                         error={getErrorForField('relative_last_name')}
                     />
+                    <EditableInputFIeld
+                        inputFor="other-name"
+                        inputText="Relative Other Name"
+                        inputType="text"
+                        inputName="other-name"
+                        inputId="other-name"
+                        placeholder="Input Relative Other Name"
+                        error={getErrorForField('relative_other_name')}
+                    />
                     <EditableSelectField
                         label="Relative Relation"
                         name="relative-relations"

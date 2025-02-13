@@ -29,12 +29,18 @@ export default function NotificationPage() {
 
     const acceptRequest = async (id: string) => {
         const response = await  processNotificationApi({ bond_request_id: id, accept: true })
-        console.log(response)
+        if (response.status === 200){
+            setNotifications(prevData => prevData?.filter(item=>item.id != id)); // Remove the item from the state
+        } else{
+            alert(`${response.error} You will have to reject`)
+        }
     }
 
     const rejectRequest = async (id: string) => {
         const response = await processNotificationApi({ bond_request_id: id, accept: false })
-        console.log(response)
+        if (response.status === 200){
+            setNotifications(prevData => prevData?.filter(item=>item.id != id)); // Remove the item from the state
+        }
     }
 
     return (
