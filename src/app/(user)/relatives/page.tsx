@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from "react";
 export default function Relatives() {
     // const { user, initialize } = useUserStore();
     const [user, setUser] = useState<ProfileData>()
+    const [error, setError] = useState<string | null | undefined>()
     const [relatives, setRelatives] = useState<RelativesData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const userCardRef = useRef<HTMLDivElement>(null);
@@ -30,7 +31,8 @@ export default function Relatives() {
                 const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);
                 setUser(fetchRelatives.data.user)
                 setRelatives(allRelatives);
-                setLoading(false);
+            } else {
+                setError(fetchRelatives.error)
             }
             setLoading(false);
         }
@@ -100,38 +102,42 @@ export default function Relatives() {
 
     return (
         <>
-            <div className="relative min-w-[1200px] flex justify-center items-center content-center flex-wrap gap-3 " ref={userCardRef}>
+            <div className="relative min-w-[1300px] flex justify-center items-center content-center flex-wrap gap-3 " ref={userCardRef}>
                 {
-                    loading || !user ? (
+                    loading ? (
                         <h1>Loading...</h1>
-                    ) : (
-                        <>
-                            {
-                                relatives.length > 1 && <div className="absolute left-[30%]">
-                                    <UserCard user={user} />
-                                </div>
-                            }
-                            {relatives.filter(relative => relative.relation === 'Father').map((relative) => (
-                                <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '20%' }} parent={true} />
-                            ))}
-                            {relatives.filter(relative => relative.relation === 'Mother').map((relative) => (
-                                <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '70%' }} parent={true} />
-                            ))}
-                            {relatives.filter(relative => relative.relation !== 'Father' && relative.relation !== 'Mother').map((relative, index) => {
-                                const columnIndex = Math.floor(index / 5);
-                                const rowIndex = index % 5;
-                                const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '75%' : '100%');
-                                const topPosition = `${15 + rowIndex * 15}%`;
+                    ) :
+                        !user ?
+                            <b>{error}</b>
+                            :
+                            (
+                                <>
+                                    {
+                                        relatives && <div className="absolute left-[30%]">
+                                            <UserCard user={user} />
+                                        </div>
+                                    }
+                                    {relatives.filter(relative => relative.relation === 'Father').map((relative) => (
+                                        <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '20%' }} parent={true} />
+                                    ))}
+                                    {relatives.filter(relative => relative.relation === 'Mother').map((relative) => (
+                                        <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: '5%', top: '70%' }} parent={true} />
+                                    ))}
+                                    {relatives.filter(relative => relative.relation !== 'Father' && relative.relation !== 'Mother').map((relative, index) => {
+                                        const columnIndex = Math.floor(index / 5);
+                                        const rowIndex = index % 5;
+                                        const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '75%' : '100%');
+                                        const topPosition = `${15 + rowIndex * 17}%`;
 
-                                return (
-                                    <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: leftPosition, top: topPosition }} />
-                                );
-                            })}
-                            {relatives.length < 1 && (
-                                <h1>You have no associated relatives, but you can add or search for relatives</h1>
-                            )}
-                        </>
-                    )
+                                        return (
+                                            <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: leftPosition, top: topPosition }} />
+                                        );
+                                    })}
+                                    {relatives.length < 1 && (
+                                        <h1>You have no associated relatives, but you can add or search for relatives</h1>
+                                    )}
+                                </>
+                            )
                 }
             </div>
         </>

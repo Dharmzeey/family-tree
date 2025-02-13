@@ -1,8 +1,7 @@
 'use client';
 import RelativeCard from "@/components/home/RelativeCard";
 import UserCard from "@/components/profile/userCard";
-import { viewRelativesApi, viewUserRelativesApi } from "@/lib/api/profile";
-// import useUserStore from "@/stores/userStore";
+import { viewUserRelativesApi } from "@/lib/api/profile";
 import { ProfileData } from "@/types/profile";
 import { RelativesData } from "@/types/relatives";
 import { redirect } from "next/navigation";
@@ -15,16 +14,12 @@ type Props = {
 }
 
 export default function UserRelatives({ params }: Props) {
-    // const { user, initialize } = useUserStore();
     const [user, setUser] = useState<ProfileData>()
     const [error, setError] = useState<string | null | undefined>()
     const [relatives, setRelatives] = useState<RelativesData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const userCardRef = useRef<HTMLDivElement>(null);
 
-    // useEffect(() => {
-    //     initialize();
-    // }, [initialize]);
 
     useEffect(() => {
         async function getRelatives() {
@@ -36,9 +31,9 @@ export default function UserRelatives({ params }: Props) {
                 const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);
                 setUser(fetchRelatives.data.user)
                 setRelatives(allRelatives);
-                setLoading(false);
+            } else {
+                setError(fetchRelatives.error)
             }
-            setError(fetchRelatives.error)
             setLoading(false);
         }
         getRelatives();
@@ -113,12 +108,12 @@ export default function UserRelatives({ params }: Props) {
                         <h1>Loading...</h1>
                     ) :
                         !user ?
-                            <h1>{error}</h1>
+                            <b>{error}</b>
                             :
                             (
                                 <>
                                     {
-                                        relatives.length > 1 && <div className="absolute left-[30%]">
+                                        relatives && <div className="absolute left-[30%]">
                                             <UserCard user={user} />
                                         </div>
                                     }

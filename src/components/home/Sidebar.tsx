@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Sidebar() {
     return (
         <>
-            <div className="h-full min-w-48 flex justify-center items-center leading-10 px-3">
+            <div className="h-full max-h-[100vh] min-w-48 flex justify-center items-center leading-10 px-3">
                 <ul>
                     <li>
                         <Link href="/">Home</Link>

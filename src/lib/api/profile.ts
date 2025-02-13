@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, DELETE_RELATIVE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
 import { ApiResponse, PaginatedApiResponse } from "@/types/api";
@@ -203,5 +203,20 @@ export async function searchRelativeApi(query: string, page?: string): Promise<P
 
     } catch (error) {
         return { error: `An error occured while searching relative` }
+    }
+}
+
+export async function deleteRelativeApi(id: string): Promise<ApiResponse>{
+    try {
+        const token = await fetchAccessTokenCookie();
+        const response = await fetch(DELETE_RELATIVE(id), {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token?.value || ""}`,
+            }
+        })
+        return handleApiResponse(response)
+    } catch (error) {
+        return { error: `An error occured while deleting relative` }
     }
 }

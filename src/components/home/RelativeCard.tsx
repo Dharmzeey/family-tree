@@ -4,6 +4,8 @@ import Image from "next/image";
 import { RelativesData } from "@/types/relatives";
 import { ActionButton } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { FaTrash } from "react-icons/fa";
+import { deleteRelativeApi } from "@/lib/api/profile";
 
 type RelativeProps = {
     relative: RelativesData;
@@ -17,18 +19,37 @@ function RelativeCard({ relative, style, parent }: RelativeProps) {
         router.push(`/relatives/${id}`)
     }
 
+    const deleteRelative = async (id: string) => {
+        if (confirm("Are you sure you want to delete this relative?")) {
+            const response = await deleteRelativeApi(id)
+            if (response.status === 200) {
+                // router.refresh()
+                window.location.reload()
+            } else {
+                alert(response.error)
+            }
+        }
+    }
+
     return (
-        <div className="flex items-center gap-2.5 bg-slate-500 rounded-lg p-2.5 shadow-sm w-[17%] z-20" style={style}>
+        <div className="flex items-center gap-2.5 bg-slate-500 rounded-lg p-2.5 pr-0 shadow-sm w-[17%] z-20" style={style}>
             <div id={`relative-dot-${relative.id}`} className={`w-2 h-2 absolute bg-[#54585f] rounded-lg ${parent ? "-right-1" : "-left-1 "}`}></div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
                 <Image src={relative.picture} alt={`${relative.first_name} ${relative.last_name}`} width={150} height={150} className="rounded-full w-14 h-14" />
-                <div className="">
-                    <div className="text-center  text-black font-bold text-lg">{relative.relation}</div>
+                <div className="w-full">
+                    <div className="flex justify-between w-full">
+                        <div className="text-center text-black font-bold text-lg">{relative.relation}</div>
+                        <button className="text-[red] font-bold" onClick={() => { deleteRelative(relative.id) }}>
+                            {/* <FaTrash size={14} /> */}
+                            X
+                        </button>
+                    </div>
                     <div className="font-bold">{relative.last_name}</div>
                     <div className="text-xs">{relative.first_name}</div>
                     <div className="text-xs">{relative.other_name}</div>
                     {
-                        relative.id.split("_")[0] === "on" && <ActionButton buttonText="View Relative" onClick={() => { handleRelativeClick(relative.id) }} />}
+                        relative.id.split("_")[0] === "on" && <div className="text-xs"><ActionButton buttonText="View Relative" onClick={() => { handleRelativeClick(relative.id) }} /></div>
+                    }
 
                 </div>
             </div>
