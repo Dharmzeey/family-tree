@@ -11,6 +11,7 @@ type RelativesData = {
     other_name: string;
     relation: string;
     picture: string;
+    has_relatives?: boolean;
 };
 
 

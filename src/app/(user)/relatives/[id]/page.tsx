@@ -126,8 +126,8 @@ export default function UserRelatives({ params }: Props) {
                                     {relatives.filter(relative => relative.relation !== 'Father' && relative.relation !== 'Mother').map((relative, index) => {
                                         const columnIndex = Math.floor(index / 5);
                                         const rowIndex = index % 5;
-                                        const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '75%' : '100%');
-                                        const topPosition = `${15 + rowIndex * 15}%`;
+                                        const leftPosition = columnIndex === 0 ? '50%' : (columnIndex === 1 ? '70%' : '90%');
+                                        const topPosition = `${15 + rowIndex * 17}%`;
 
                                         return (
                                             <RelativeCard key={relative.id} relative={relative} style={{ position: 'absolute', left: leftPosition, top: topPosition }} />

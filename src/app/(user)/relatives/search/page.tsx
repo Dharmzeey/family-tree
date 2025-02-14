@@ -79,6 +79,20 @@ export default function SearchRelatives() {
         }
     };
 
+
+    useEffect(() => {
+        const onESCPress = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setActivePopupId(null);
+            }
+        };
+
+        document.addEventListener("keydown", onESCPress);
+        return () => {
+            document.removeEventListener("keydown", onESCPress);
+        };
+    }, []);
+
     return (
         <>
             <div className={`${searchResult && searchResult.length > 1 ? "justify-normal" : "justify-center"} leading-10 relative flex items-center flex-col`}>

@@ -11,9 +11,10 @@ type RelativeProps = {
     relative: RelativesData;
     style?: React.CSSProperties;
     parent?: boolean;
+    isLoggedInOwner?: boolean; // This will put a delete icon for when the Logged in user is viewing their own relatives, but will be absent when the are viewing others
 };
 
-function RelativeCard({ relative, style, parent }: RelativeProps) {
+function RelativeCard({ relative, style, parent, isLoggedInOwner }: RelativeProps) {
     const router = useRouter();
     const handleRelativeClick = (id: string) => {
         router.push(`/relatives/${id}`)
@@ -39,16 +40,18 @@ function RelativeCard({ relative, style, parent }: RelativeProps) {
                 <div className="w-full">
                     <div className="flex justify-between w-full">
                         <div className="text-center text-black font-bold text-lg">{relative.relation}</div>
-                        <button className="text-[red] font-bold" onClick={() => { deleteRelative(relative.id) }}>
-                            {/* <FaTrash size={14} /> */}
-                            X
-                        </button>
+                        {
+                            isLoggedInOwner && <button className="text-[red] font-bold" onClick={() => { deleteRelative(relative.id) }}>
+                                {/* <FaTrash size={14} /> */}
+                                X
+                            </button>
+                        }
                     </div>
                     <div className="font-bold">{relative.last_name}</div>
                     <div className="text-xs">{relative.first_name}</div>
                     <div className="text-xs">{relative.other_name}</div>
                     {
-                        relative.id.split("_")[0] === "on" && <div className="text-xs"><ActionButton buttonText="View Relative" onClick={() => { handleRelativeClick(relative.id) }} /></div>
+                        relative.has_relatives && <div className="text-xs"><ActionButton buttonText="View Relative" onClick={() => { handleRelativeClick(relative.id) }} /></div>
                     }
 
                 </div>
