@@ -3,7 +3,7 @@
 import { ApiResponse } from "@/types/api";
 import { SIGNUP, CONFIRM_EMAIL_VERIFICATION, SEND_EMAIL_VERIFICATION, LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, CREATE_NEW_PASSWORD } from "../endpoints/auth";
 import { CreateUserData, PinVerificationData, LoginUserData, ForgotPasswordData, ResetPasswordPinData, CreateNewPasswordData } from "@/types/auth";
-import { handleAccessToken, fetchAccessTokenCookie, removeAllTokens } from "@/utils/cookies";
+import { handleAccessToken, fetchAccessTokenCookie, removeAllTokens, setRoleCookie } from "@/utils/cookies";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse } from "@/utils/apiResponse";
 import { handleErrorsResponse } from "@/types/responseHandler";
@@ -98,6 +98,7 @@ export async function loginUserApi(data: LoginUserData): Promise<ApiResponse> {
                 const access_token = responseBody.access_token;
                 // const refresh_token = responseBody.refresh_token;
                 await handleAccessToken(access_token);
+                await setRoleCookie(responseBody.data) // this will access the is_author or is_Handler
                 // handleRefreshToken(refresh_token);
                 return { message: "Login successful", status: 200 };
             default:

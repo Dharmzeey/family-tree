@@ -1,6 +1,6 @@
 "use server"
 
-import { ACCESS_TOKEN_NAME, ACCESS_TOKEN_MAX_AGE, SESSION_ID, SESSION_TOKEN_MAX_AGE } from "@/lib/constants";
+import { ACCESS_TOKEN_NAME, ACCESS_TOKEN_MAX_AGE, SESSION_ID, SESSION_TOKEN_MAX_AGE, USER_ROLES } from "@/lib/constants";
 import { cookies } from "next/headers";
 
 
@@ -40,8 +40,7 @@ async function fetchAuthenticatedUser() {
 
 
 async function removeAllTokens() {
-    const cookieStore = cookies();
-    (await cookieStore).delete(ACCESS_TOKEN_NAME)
+    return (await cookies()).delete(ACCESS_TOKEN_NAME)
     // cookieStore.delete(REFRESH_TOKEN_NAME)
 }
 
@@ -63,4 +62,24 @@ async function getSessionId() {
     return (await cookieStore).get(SESSION_ID)?.value || null;
 }
 
-export { handleAccessToken, fetchAccessTokenCookie, fetchAuthenticatedUser, removeAllTokens, setSessionId, getSessionId }
+async function setRoleCookie(data: { is_author: boolean, is_handler: boolean }) {
+    (await cookies()).set({
+        name: USER_ROLES,
+        value: JSON.stringify(data),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: ACCESS_TOKEN_MAX_AGE,
+        path: "/",
+    })
+}
+
+async function fetchRolesCookies() {
+    const roleCookies = (await cookies()).get(USER_ROLES)?.value;
+    return roleCookies ? JSON.parse(roleCookies) : {};
+}
+
+async function removeRolesCookie() {
+    return (await cookies()).delete(USER_ROLES)
+}
+
+export { handleAccessToken, fetchAccessTokenCookie, fetchAuthenticatedUser, removeAllTokens, setSessionId, getSessionId, setRoleCookie, fetchRolesCookies, removeRolesCookie }
