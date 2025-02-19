@@ -1,10 +1,17 @@
 'use client';
+import AddFamilyBeliefSystem from "@/components/family/AddBeliefSystem";
+import AddEulogy from "@/components/family/AddEulogy";
+import AddFamilyHead from "@/components/family/AddFamilyHead";
+import AddFamilyOrigin from "@/components/family/AddFamilyOrigin";
+import AddHandler from "@/components/family/AddHandler";
+import AddHouseInformation from "@/components/family/AddHouseInfo";
+import AddOtherInformation from "@/components/family/AddOtherInfo";
 import FamilyInfo from "@/components/family/FamilyInfo";
 import { viewFamilyApi } from "@/lib/api/family";
 import { FamilyData } from "@/types/family";
 import { fetchRolesCookies } from "@/utils/cookies";
 import { useEffect, useState } from "react";
-import { FaPen, FaPlus } from "react-icons/fa";
+import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
 
 export default function FamilyPage() {
     const [roles, setRoles] = useState<{ is_author: boolean, is_handler: boolean }>({ is_author: false, is_handler: false });
@@ -12,11 +19,19 @@ export default function FamilyPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null | undefined>()
 
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const [familyHeadModal, setFamilyHeadModal] = useState<boolean>(false);
+    const [familyOriginModal, setFamilyOriginModal] = useState<boolean>(false);
+    const [familyHouseInfoModal, setFamilyHouseInfoModal] = useState<boolean>(false);
+    const [familyBeliefSystemModal, setFamilyBeliefSystemModal] = useState<boolean>(false);
+    const [familyEulogyModal, setFamilyEulogyModal] = useState<boolean>(false);
+    const [familyOtherInfoModal, setFamilyOtherInfoModal] = useState<boolean>(false);
+    const [familyHandlersModal, setFamilyHandlersModal] = useState<boolean>(false);
+
     useEffect(() => {
         async function fetchRoles() {
             const roles = await fetchRolesCookies();
-            console.log(roles.is_author)
-            console.log(roles.is_handler)
             setRoles(roles);
         }
         fetchRoles();
@@ -42,12 +57,17 @@ export default function FamilyPage() {
         fetchFamily();
     }, []);
 
+    const toggleModal = (modalSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
+        setShowModal(!showModal);
+        modalSetter(prev => !prev);
+    }
+
     if (loading) return <p className="flex justify-center items-center">Loading family details...</p>;
     if (error) return <p className="flex justify-center items-center">{error}</p>;
     if (!family) return <p className="flex justify-center items-center">No family data available.</p>;
 
     return (
-        <div className="p-6 w-[90%] mx-auto shadow-lg rounded-lg">
+        <div className="p-6 w-[90%] mx-auto shadow-lg rounded-lg  z-30">
             <h1 className="text-2xl font-bold mb-4 text-center">The family of {family.name}</h1>
             <p className="font-bold text-xl text-gray-200">Author: {family.author}</p>
 
@@ -55,8 +75,12 @@ export default function FamilyPage() {
                 <div className="flex gap-2">
                     <h2 className="text-xl font-semibold">Family Heads</h2>
                     {
-                        (roles.is_author || roles.is_handler) && <FaPlus />
-
+                        (roles.is_author || roles.is_handler) && <button onClick={() => toggleModal(setFamilyHeadModal)}><FaPlus /></button>
+                    }
+                    {
+                        (showModal && familyHeadModal) && <div className="absolute w-full top-[15%]">
+                            <AddFamilyHead />
+                        </div>
                     }
                 </div>
                 {family.family_heads && family.family_heads.length > 0 ? (
@@ -78,29 +102,78 @@ export default function FamilyPage() {
                     <p>No family heads available.</p>
                 )}
             </div>
-            <FamilyInfo heading="Origin" details={family.family_origin ? family.family_origin.details : "No origin details available."} roles={roles} />
 
-            <FamilyInfo heading="House Information" details={family.family_house_info ? family.family_house_info.details : "No house information available."} roles={roles} />
+            <FamilyInfo heading="Origin"
+                details={family.family_origin ? family.family_origin.details : "No origin details available."}
+                roles={roles}
+                isAdded={family.family_origin ? true : false}
+                onClickFn={() => { toggleModal(setFamilyOriginModal) }} />
+            {
+                (showModal && familyOriginModal) && <div className="absolute w-full top-[30%]">
+                    <AddFamilyOrigin />
+                </div>
+            }
 
-            <FamilyInfo heading="Belief System" details={family.family_belief_system ? family.family_belief_system.details : "No belief system details available."} roles={roles} />
+            <FamilyInfo heading="House Information"
+                details={family.family_house_info ? family.family_house_info.details : "No house information available."}
+                roles={roles}
+                isAdded={family.family_house_info ? true : false}
+                onClickFn={() => { toggleModal(setFamilyHouseInfoModal) }} />
+            {
+                (showModal && familyHouseInfoModal) && <div className="absolute w-full ">
+                    <AddHouseInformation />
+                </div>
+            }
 
-            <FamilyInfo heading="Eulogy" details={family.family_eulogy ? family.family_eulogy.details : "No eulogy details available."} roles={roles} />
+            <FamilyInfo heading="Belief System"
+                details={family.family_belief_system ? family.family_belief_system.details : "No belief system details available."}
+                roles={roles}
+                isAdded={family.family_belief_system ? true : false}
+                onClickFn={() => { toggleModal(setFamilyBeliefSystemModal) }} />
+            {
+                (showModal && familyBeliefSystemModal) && <div className="absolute w-full top-[15%]">
+                    <AddFamilyBeliefSystem />
+                </div>
+            }
 
-            <FamilyInfo heading="Other Information" details={family.family_other_information ? family.family_other_information.details : "No other information available."} roles={roles} />
+            <FamilyInfo heading="Eulogy"
+                details={family.family_eulogy ? family.family_eulogy.details : "No eulogy details available."}
+                roles={roles}
+                isAdded={family.family_eulogy ? true : false}
+                onClickFn={() => { toggleModal(setFamilyEulogyModal) }}
+                isPreserved={true} />
+            {
+                (showModal && familyEulogyModal) && <div className="absolute w-full top-[15%]">
+                    <AddEulogy />
+                </div>
+            }
+
+            <FamilyInfo heading="Other Information"
+                details={family.family_other_information ? family.family_other_information.details : "No other information available."}
+                roles={roles}
+                isAdded={family.family_other_information ? true : false}
+                onClickFn={() => { toggleModal(setFamilyOtherInfoModal) }} />
+            {
+                (showModal && familyOtherInfoModal) && <div className="absolute w-full top-[40%]">
+                    <AddOtherInformation />
+                </div>
+            }
 
             <div className="mt-4">
                 <div className="flex gap-2">
                     <h2 className="text-xl font-semibold">Family Handlers in charge of these information</h2>
                     {
-                        (roles.is_author || roles.is_handler) && <FaPlus />
+                        (roles.is_author || roles.is_handler) && <button onClick={() => toggleModal(setFamilyHandlersModal)}><FaPlus /></button>
                     }
                 </div>
                 {family.family_handlers && family.family_handlers.length > 0 ? (
                     <ul className="list-disc pl-5">
                         {family.family_handlers.map((handler) => (
                             <li key={handler.id}>
-                                <div className="flex gap-3">
-                                    {handler.operator} {roles.is_author && <FaPen />}
+                                <div className="flex gap-2 items-center">
+                                    {handler.operator} {roles.is_author && <button>
+                                        <FaTrash size={12} color="red" />
+                                    </button>}
                                 </div>
                             </li>
                         ))}
@@ -109,7 +182,11 @@ export default function FamilyPage() {
                     <p>No family handlers available.</p>
                 )}
             </div>
-
+            {
+                (showModal && familyHandlersModal) && <div className="absolute w-full top-[50%]">
+                    <AddHandler />
+                </div>
+            }
         </div>
     );
 }

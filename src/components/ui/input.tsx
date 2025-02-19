@@ -101,7 +101,7 @@ function ImageInputField(inputProp: EditInputProp) {
 function EditableTextAreaFIeld(inputProp: EditTextAreaProp) {
     return (
         <>
-            <div className="my-3">
+            <div className="my-2 w-[min(80%,40rem)]">
                 <label htmlFor={inputProp.inputFor}>{inputProp.inputText}</label>
                 <br />
                 <textarea
@@ -109,11 +109,11 @@ function EditableTextAreaFIeld(inputProp: EditTextAreaProp) {
                     name={inputProp.inputName}
                     // will be required by default, it will be turned off when the component is invoked
                     required={inputProp.required}
-                    className="px-2 py-2 border border-input-border-color w-full rounded"
+                    className="mt-1 block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={inputProp.inputValue}
                     defaultValue={inputProp.defaultValue}
                     onChange={inputProp.onChange}
-                    rows={5}
+                    rows={7}
                 ></textarea>
                 {/* Render error message if it exists */}
                 {inputProp.error && <p style={{ color: 'red' }}>{inputProp.error}</p>}

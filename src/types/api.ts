@@ -6,6 +6,7 @@ interface ApiResponse<T = any> {
     message?: string;
     token?: string | null;
     error?: string | null;
+    errors?: Record<string, string[]>;
     data?: T;
 };
 

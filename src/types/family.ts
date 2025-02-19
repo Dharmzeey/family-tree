@@ -35,8 +35,3 @@ export type FamilyData = {
     name: string;
     author: string;
 };
-
-export type FamilyApiResponse = {
-    data: FamilyData;
-    message: string;
-};
