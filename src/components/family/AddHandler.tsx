@@ -18,7 +18,6 @@ export default function AddHandler() {
         setErrors(formState.zodErrors)
     }, [formState])
 
-
     const getErrorForField = (fieldName: string) => {
         return errors?.filter((error) => error.path.includes(fieldName)).map((error) => error.message).join(', '); // Combines multiple messages if any
     };
@@ -26,14 +25,14 @@ export default function AddHandler() {
         <>
             <div className="bg-[#ffffff0a] shadow-xl backdrop-blur-md w-9/12 lg:w-1/2 py-8 px-4 rounded-2xl">
                 <form action={formAction} className="flex flex-col justify-center items-center w-full">
-                    <h2 className="text-2xl">Add Family Head</h2>
+                    <h2 className="text-2xl">Add Family Handler</h2>
                     <EditableInputFIeld
                         inputFor="person-id"
-                        inputText="ID for the Family Head"
+                        inputText="ID for the Handler"
                         inputType="text"
                         inputName="person-id"
                         inputId="person-id"
-                        placeholder="Input person ID"
+                        placeholder="Input Handler's ID"
                         required
                         error={getErrorForField('person')}
                     />

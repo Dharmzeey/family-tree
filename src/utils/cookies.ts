@@ -40,8 +40,8 @@ async function fetchAuthenticatedUser() {
 
 
 async function removeAllTokens() {
-    return (await cookies()).delete(ACCESS_TOKEN_NAME)
-    // cookieStore.delete(REFRESH_TOKEN_NAME)
+    (await cookies()).delete(ACCESS_TOKEN_NAME);
+    (await cookies()).delete(USER_ROLES);
 }
 
 async function setSessionId(session_token: string) {

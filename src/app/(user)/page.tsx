@@ -17,9 +17,7 @@ export default function Home() {
         try {
             const fetchProfile = await fetchProfileApi();
 
-            if (fetchProfile.status === 401) {
-                router.push("/login");
-            } else if (fetchProfile.status === 404) {
+            if (fetchProfile.status === 404) {
                 router.push("/profile/create");
             }
 

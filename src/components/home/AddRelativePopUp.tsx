@@ -2,7 +2,6 @@
 
 import { fetchRelationsApi } from "@/lib/api/profile";
 import { RelationData } from "@/types/relatives";
-import { redirect } from "next/navigation";
 import { useActionState, useEffect, useState } from "react"
 import { ZodIssue } from "zod";
 import { EditableSelectField } from "../ui/input";
@@ -21,9 +20,6 @@ export default function AddOnlineRelativePopUp(relative: { profile: ProfileData 
     useEffect(() => {
         async function getRelations() {
             await fetchRelationsApi().then((response) => {
-                if (response.status === 401) {
-                    redirect('/login')
-                }
                 setRelations(response.data)
             })
         }

@@ -4,7 +4,6 @@ import { useActionState, useEffect, useState } from "react";
 import { EditableInputFIeld, EditableSelectField, ImageInputField } from "../ui/input";
 import { fetchRelationsApi } from "@/lib/api/profile";
 import { RelationData } from "@/types/relatives";
-import { redirect } from "next/navigation";
 import { addOfflineRelative } from "@/lib/validation/profile";
 import { ZodIssue } from "zod";
 import { SubmitButton } from "../ui/button";
@@ -20,9 +19,6 @@ export default function RelativeForm() {
     useEffect(() => {
         async function getRelations() {
             await fetchRelationsApi().then((response) => {
-                if (response.status === 401) {
-                    redirect('/login')
-                }
                 setRelations(response.data)
             })
         }

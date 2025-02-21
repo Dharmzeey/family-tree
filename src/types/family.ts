@@ -10,6 +10,7 @@ export type FamilyData = {
     }[];
     family_handlers?: {
         id: string;
+        operator_id: string;
         operator: string;
     }[];
     family_origin?: {

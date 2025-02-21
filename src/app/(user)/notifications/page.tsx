@@ -15,9 +15,7 @@ export default function NotificationPage() {
     useEffect(() => {
         const fetchNotifications = async () => {
             const response = await getNotificationsApi()
-            if (response.status === 401) {
-                router.push("/login")
-            } else if (response.status === 200) {
+            if (response.status === 200) {
                 setNotifications(response.data)
             } else {
                 setError(response.error)
@@ -28,18 +26,18 @@ export default function NotificationPage() {
     }, [router])
 
     const acceptRequest = async (id: string) => {
-        const response = await  processNotificationApi({ bond_request_id: id, accept: true })
-        if (response.status === 200){
-            setNotifications(prevData => prevData?.filter(item=>item.id != id)); // Remove the item from the state
-        } else{
+        const response = await processNotificationApi({ bond_request_id: id, accept: true })
+        if (response.status === 200) {
+            setNotifications(prevData => prevData?.filter(item => item.id != id)); // Remove the item from the state
+        } else {
             alert(`${response.error} You will have to reject`)
         }
     }
 
     const rejectRequest = async (id: string) => {
         const response = await processNotificationApi({ bond_request_id: id, accept: false })
-        if (response.status === 200){
-            setNotifications(prevData => prevData?.filter(item=>item.id != id)); // Remove the item from the state
+        if (response.status === 200) {
+            setNotifications(prevData => prevData?.filter(item => item.id != id)); // Remove the item from the state
         }
     }
 
@@ -61,7 +59,7 @@ export default function NotificationPage() {
                                 </div>
                                 <div className="flex gap-3 items-center">
                                     <ActionButton buttonText="Accept" onClick={() => acceptRequest(notification.id)} />
-                                    <ActionButton buttonText="Reject" onClick={()=> rejectRequest(notification.id)} />
+                                    <ActionButton buttonText="Reject" onClick={() => rejectRequest(notification.id)} />
                                 </div>
                             </div>
                         </div>

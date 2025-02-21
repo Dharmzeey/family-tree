@@ -7,7 +7,7 @@ import AddHandler from "@/components/family/AddHandler";
 import AddHouseInformation from "@/components/family/AddHouseInfo";
 import AddOtherInformation from "@/components/family/AddOtherInfo";
 import FamilyInfo from "@/components/family/FamilyInfo";
-import { viewFamilyApi } from "@/lib/api/family";
+import { deleteHandlerApi, viewFamilyApi } from "@/lib/api/family";
 import { FamilyData } from "@/types/family";
 import { fetchRolesCookies } from "@/utils/cookies";
 import { useEffect, useState } from "react";
@@ -37,6 +37,7 @@ export default function FamilyPage() {
         fetchRoles();
     }, []);
 
+
     useEffect(() => {
         const fetchFamily = async () => {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -57,10 +58,19 @@ export default function FamilyPage() {
         fetchFamily();
     }, []);
 
+
     const toggleModal = (modalSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
         setShowModal(!showModal);
         modalSetter(prev => !prev);
     }
+
+    const deleteHandler = async (operatorId: string, operator: string) => {
+        if (confirm(`Are you sure you want to remove ${operator} from the list of people who Manage this family's profile ?`)) {
+            await deleteHandlerApi(operatorId);
+            location.reload()
+        }
+    }
+
 
     if (loading) return <p className="flex justify-center items-center">Loading family details...</p>;
     if (error) return <p className="flex justify-center items-center">{error}</p>;
@@ -131,7 +141,7 @@ export default function FamilyPage() {
                 isAdded={family.family_belief_system ? true : false}
                 onClickFn={() => { toggleModal(setFamilyBeliefSystemModal) }} />
             {
-                (showModal && familyBeliefSystemModal) && <div className="absolute w-full top-[15%]">
+                (showModal && familyBeliefSystemModal) && <div className="absolute w-full top-[10%]">
                     <AddFamilyBeliefSystem />
                 </div>
             }
@@ -171,9 +181,10 @@ export default function FamilyPage() {
                         {family.family_handlers.map((handler) => (
                             <li key={handler.id}>
                                 <div className="flex gap-2 items-center">
-                                    {handler.operator} {roles.is_author && <button>
-                                        <FaTrash size={12} color="red" />
-                                    </button>}
+                                    {handler.operator} {roles.is_author &&
+                                        <button onClick={() => { deleteHandler(handler.operator_id, handler.operator) }}>
+                                            <FaTrash size={12} color="red" />
+                                        </button>}
                                 </div>
                             </li>
                         ))}

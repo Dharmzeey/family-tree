@@ -1,10 +1,12 @@
 "use client";
-import { fetchRolesCookies } from "@/utils/cookies";
+import { fetchRolesCookies, removeAllTokens } from "@/utils/cookies";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function Sidebar() {
     const [roles, setRoles] = useState<{ is_author: boolean, is_handler: boolean }>({ is_author: false, is_handler: false });
+    const router = useRouter()
 
     useEffect(() => {
         async function fetchRoles() {
@@ -13,6 +15,12 @@ export default function Sidebar() {
         }
         fetchRoles();
     }, []);
+
+    const logout = async () => {
+        await removeAllTokens();
+        localStorage.removeItem('user')
+        router.replace("/login")
+    }
 
     return (
         <>
@@ -38,6 +46,11 @@ export default function Sidebar() {
                             <Link href="/families">Families</Link>
                         </li>
                     )}
+                    <li>
+                        <button onClick={logout}>
+                            Logout
+                        </button>
+                    </li>
                 </ul>
             </div>
         </>

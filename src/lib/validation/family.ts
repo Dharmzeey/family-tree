@@ -161,5 +161,5 @@ export async function addHandler(
         };
     }
     const data = parse.data;
-    return addHandlerApi(data);
+    return addHandlerApi(data.operator_id);
 }

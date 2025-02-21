@@ -23,9 +23,7 @@ export default function Relatives() {
     useEffect(() => {
         async function getRelatives() {
             const fetchRelatives = await viewRelativesApi();
-            if (fetchRelatives.status === 401) {
-                redirect('/login');
-            } else if (fetchRelatives.status === 404 && fetchRelatives.error === "User profile does not exist. Please create a profile first.") {
+            if (fetchRelatives.status === 404 && fetchRelatives.error === "User profile does not exist. Please create a profile first.") {
                 redirect('/profile/create');
             } else if (fetchRelatives.status === 200) {
                 const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);

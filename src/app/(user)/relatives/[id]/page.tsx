@@ -4,7 +4,6 @@ import UserCard from "@/components/profile/userCard";
 import { viewUserRelativesApi } from "@/lib/api/profile";
 import { ProfileData } from "@/types/profile";
 import { RelativesData } from "@/types/relatives";
-import { redirect } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
 type Props = {
@@ -25,9 +24,7 @@ export default function UserRelatives({ params }: Props) {
         async function getRelatives() {
             const { id } = await params;
             const fetchRelatives = await viewUserRelativesApi(id);
-            if (fetchRelatives.status === 401) {
-                redirect('/login');
-            } else if (fetchRelatives.status === 200) {
+            if (fetchRelatives.status === 200) {
                 const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);
                 setUser(fetchRelatives.data.user)
                 setRelatives(allRelatives);
