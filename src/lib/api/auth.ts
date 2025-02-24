@@ -6,7 +6,7 @@ import { CreateUserData, PinVerificationData, LoginUserData, ForgotPasswordData,
 import { handleAccessToken, fetchAccessTokenCookie, removeAllTokens, setRoleCookie } from "@/utils/cookies";
 // import { handleErrorsResponse } from "@/types/responseHandler";
 import { handleApiResponse } from "@/utils/apiResponse";
-import { handleErrorsResponse } from "@/types/responseHandler";
+import { handleErrorsResponse } from "@/utils/responseHandler";
 
 
 export async function createUserApi(data: CreateUserData): Promise<ApiResponse> {

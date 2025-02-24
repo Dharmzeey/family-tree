@@ -1,4 +1,4 @@
-import { handleErrorsResponse } from "@/types/responseHandler";
+import { handleErrorsResponse } from "@/utils/responseHandler";
 import { redirect } from "next/navigation";
 
 export async function handleApiResponse(response: Response) {

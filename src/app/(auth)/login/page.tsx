@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useActionState } from "react";
 import { ZodIssue } from "zod";
+import { getErrorField } from "@/utils/errorRenderer";
 
 
 const initialState = {
@@ -14,7 +15,7 @@ const initialState = {
 };
 
 export default function SignupPage() {
-	const [state, formAction, pending] = useActionState(loginUser, initialState);
+	const [state, formAction] = useActionState(loginUser, initialState);
 	const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
 	const [loginEmail, setLoginEmail] = useState<boolean>(true);
 	const router = useRouter();
@@ -30,10 +31,6 @@ export default function SignupPage() {
 	useEffect(() => {
 		setErrors(state.zodErrors)
 	}, [state])
-
-	const getErrorForField = (fieldName: string) => {
-		return errors?.filter((error) => error.path.includes(fieldName)).map((error) => error.message).join(', '); // Combines multiple messages if any
-	};
 
 	return (
 		<>
@@ -55,7 +52,7 @@ export default function SignupPage() {
 									inputName="email"
 									placeholder="Input your Email"
 									required
-									error={getErrorForField('email')}
+									error={getErrorField('email', errors)}
 								/>
 								:
 								<EditableInputFIeld
@@ -66,7 +63,7 @@ export default function SignupPage() {
 									inputName="phone-number"
 									placeholder="Input your Phone Number"
 									required
-									error={getErrorForField('phone_number')}
+									error={getErrorField('phone_number', errors)}
 								/>
 						}
 						<EditableInputFIeld
@@ -77,7 +74,7 @@ export default function SignupPage() {
 							inputName="password"
 							placeholder="Input your Password"
 							required
-							error={getErrorForField('password')}
+							error={getErrorField('password', errors)}
 						/>
 
 						<SubmitButton

@@ -23,6 +23,6 @@ export const UPDATE_OTHER_INFO = (familyId: string) => `${BASE_URL}/families/${f
 export const ADD_EULOGY = (familyId: string) => `${BASE_URL}/families/${familyId}/eulogy/add/`;
 export const UPDATE_EULOGY = (familyId: string) => `${BASE_URL}/families/${familyId}/eulogy/update/`;
 
-export const ADD_FAMILY_HEAD = (familyId: string) => `${BASE_URL}/families/${familyId}/family-head/add/`;
-export const UPDATE_FAMILY_HEAD = (familyId: string) => `${BASE_URL}/families/${familyId}/family-head/update/`;
-export const DELETE_FAMILY_HEAD = (familyId: string, familyHeadId: string) => `${BASE_URL}/families/${familyId}/family-head/${familyHeadId}/delete/`;
+export const ADD_FAMILY_HEAD = (familyId: string) => `${BASE_URL}/families/${familyId}/family-heads/add/`;
+export const UPDATE_FAMILY_HEAD = (familyId: string, familyHeadId: string) => `${BASE_URL}/families/${familyId}/family-heads/${familyHeadId}/update/`;
+export const DELETE_FAMILY_HEAD = (familyId: string, familyHeadId: string) => `${BASE_URL}/families/${familyId}/family-heads/${familyHeadId}/delete/`;

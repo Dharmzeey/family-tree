@@ -11,7 +11,7 @@ export default function HamburgerMenu() {
         <>
             <div className="md:hidden">
                 <button
-                    className="fixed top-4 left-4 p-d2 text-white z-50"
+                    className="fixed top-4 left-4 p-2 text-white z-[60]"
                     onClick={() => {
                         setIsSidebarOpen(!isSidebarOpen);
                     }}
@@ -20,7 +20,7 @@ export default function HamburgerMenu() {
                 </button>
 
                 <div
-                    className={`fixed md:relative h-full px-2 transition-transform duration-300 ease-in-out bg-[#091325] z-30 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    className={`fixed md:relative h-full px-2 transition-transform duration-300 ease-in-out bg-[#091325] z-50 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                         } md:translate-x-0`}
                 >
                     <Sidebar />

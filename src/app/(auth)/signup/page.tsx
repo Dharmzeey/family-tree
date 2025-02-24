@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useActionState } from "react";
 import { ZodIssue } from "zod";
-
+import { getErrorField } from "@/utils/errorRenderer";
 
 const initialState = {
     message: "",
@@ -30,9 +30,6 @@ export default function SignupPage() {
         setErrors(state.zodErrors)
     }, [state])
 
-    const getErrorForField = (fieldName: string) => {
-        return errors?.filter((error) => error.path.includes(fieldName)).map((error) => error.message).join(', '); // Combines multiple messages if any
-    };
 
     return (
         <>
@@ -48,7 +45,7 @@ export default function SignupPage() {
                             inputName="email"
                             placeholder="Input your Email"
                             required
-                            error={getErrorForField('email')}
+                            error={getErrorField('email', errors)}
                         />
                         <EditableInputFIeld
                             inputFor="phone-number"
@@ -58,7 +55,7 @@ export default function SignupPage() {
                             inputName="phone-number"
                             placeholder="Input your Phone Number"
                             required
-                            error={getErrorForField('phone_number')}
+                            error={getErrorField('phone_number', errors)}
                         />
                         <EditableInputFIeld
                             inputFor="password"
@@ -68,7 +65,7 @@ export default function SignupPage() {
                             inputName="password"
                             placeholder="Input your Password"
                             required
-                            error={getErrorForField('password')}
+                            error={getErrorField('password', errors)}
                         />
                         <EditableInputFIeld
                             inputFor="confirm-password"
@@ -78,7 +75,7 @@ export default function SignupPage() {
                             inputName="confirm-password"
                             placeholder="Retype your password"
                             required
-                            error={getErrorForField('confirm_password')}
+                            error={getErrorField('confirm_password', errors)}
                         />
 
                         <SubmitButton

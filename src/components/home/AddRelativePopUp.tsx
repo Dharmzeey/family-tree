@@ -8,6 +8,7 @@ import { EditableSelectField } from "../ui/input";
 import { addOnlineRelative } from "@/lib/validation/profile";
 import { ProfileData } from "@/types/profile";
 import { SubmitButton } from "../ui/button";
+import { getErrorField } from "@/utils/errorRenderer";
 
 const initialState = {
     message: ""
@@ -30,12 +31,6 @@ export default function AddOnlineRelativePopUp(relative: { profile: ProfileData 
         setErrors(formState.zodErrors)
     }, [formState])
 
-
-    const getErrorForField = (fieldName: string) => {
-        return errors?.filter((error) => error.path.includes(fieldName)).map((error) => error.message).join(', '); // Combines multiple messages if any
-    };
-
-
     return (
         <>
             <div className="absolute w-full bg-black p-4 z-20">
@@ -47,7 +42,7 @@ export default function AddOnlineRelativePopUp(relative: { profile: ProfileData 
                         name="relative-relations"
                         id="relative-relations"
                         data={relations}
-                        error={getErrorForField('relation')}
+                        error={getErrorField('relation', errors)}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD RELATIVE" />
                     {formState.error && (

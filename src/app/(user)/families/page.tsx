@@ -6,12 +6,18 @@ import AddFamilyOrigin from "@/components/family/AddFamilyOrigin";
 import AddHandler from "@/components/family/AddHandler";
 import AddHouseInformation from "@/components/family/AddHouseInfo";
 import AddOtherInformation from "@/components/family/AddOtherInfo";
+import UpdateFamilyBeliefSystem from "@/components/family/UpdateBeliefSystem";
+import UpdateHouseInformation from "@/components/family/UpdateHouseInfo";
 import FamilyInfo from "@/components/family/FamilyInfo";
-import { deleteHandlerApi, viewFamilyApi } from "@/lib/api/family";
+import { deleteFamilyHeadApi, deleteHandlerApi, viewFamilyApi } from "@/lib/api/family";
 import { FamilyData } from "@/types/family";
 import { fetchRolesCookies } from "@/utils/cookies";
 import { useEffect, useState } from "react";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import UpdateFamilyOrigin from "@/components/family/UpdateFamilyOrigin";
+import UpdateEulogy from "@/components/family/UpdateEulogy";
+import UpdateOtherInformation from "@/components/family/UpdateOtherInfo";
+import UpdateFamilyHead from "@/components/family/UpdateFamilyHead";
 
 export default function FamilyPage() {
     const [roles, setRoles] = useState<{ is_author: boolean, is_handler: boolean }>({ is_author: false, is_handler: false });
@@ -19,15 +25,7 @@ export default function FamilyPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null | undefined>()
 
-    const [showModal, setShowModal] = useState<boolean>(false);
-
-    const [familyHeadModal, setFamilyHeadModal] = useState<boolean>(false);
-    const [familyOriginModal, setFamilyOriginModal] = useState<boolean>(false);
-    const [familyHouseInfoModal, setFamilyHouseInfoModal] = useState<boolean>(false);
-    const [familyBeliefSystemModal, setFamilyBeliefSystemModal] = useState<boolean>(false);
-    const [familyEulogyModal, setFamilyEulogyModal] = useState<boolean>(false);
-    const [familyOtherInfoModal, setFamilyOtherInfoModal] = useState<boolean>(false);
-    const [familyHandlersModal, setFamilyHandlersModal] = useState<boolean>(false);
+    const [activePopupId, setActivePopupId] = useState<string | null>(null)
 
     useEffect(() => {
         async function fetchRoles() {
@@ -59,14 +57,19 @@ export default function FamilyPage() {
     }, []);
 
 
-    const toggleModal = (modalSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
-        setShowModal(!showModal);
-        modalSetter(prev => !prev);
+    const handleShowPopup = (id: string) => {
+        setActivePopupId(activePopupId === id ? null : id)
     }
 
     const deleteHandler = async (operatorId: string, operator: string) => {
         if (confirm(`Are you sure you want to remove ${operator} from the list of people who Manage this family's profile ?`)) {
             await deleteHandlerApi(operatorId);
+            location.reload()
+        }
+    }
+    const deleteFamilyHead = async (familyId: string, familyHead: string, familyHeadId: string) => {
+        if (confirm(`Are you sure you want to delete ${familyHead} from the list of the family's Head ?`)) {
+            await deleteFamilyHeadApi(familyId, familyHeadId);
             location.reload()
         }
     }
@@ -85,10 +88,10 @@ export default function FamilyPage() {
                 <div className="flex gap-2">
                     <h2 className="text-xl font-semibold">Family Heads</h2>
                     {
-                        (roles.is_author || roles.is_handler) && <button onClick={() => toggleModal(setFamilyHeadModal)}><FaPlus /></button>
+                        (roles.is_author || roles.is_handler) && <button onClick={() => handleShowPopup('add-family')}><FaPlus /></button>
                     }
                     {
-                        (showModal && familyHeadModal) && <div className="absolute w-full top-[15%]">
+                        (activePopupId === 'add-family') && <div className="absolute w-full top-[25%]">
                             <AddFamilyHead />
                         </div>
                     }
@@ -100,7 +103,20 @@ export default function FamilyPage() {
                                 <div className="flex gap-3">
                                     <b>{head.person} ({head.still_on_throne ? "Still on throne" : "Former"})</b>
                                     {
-                                        (roles.is_author || roles.is_handler) && <FaPen />
+                                        (roles.is_author || roles.is_handler) &&
+                                        <div className="flex gap-4">
+                                            <button onClick={() => handleShowPopup(head.id)}>
+                                                <FaPen />
+                                            </button>
+                                            <button onClick={() => deleteFamilyHead(family.id, head.person, head.id)}>
+                                                <FaTrash color="red" />
+                                            </button>
+                                        </div>
+                                    }
+                                    {
+                                        (activePopupId === head.id) && <div className="absolute w-full top-[30%]">
+                                            <UpdateFamilyHead familyHead={head} />
+                                        </div>
                                     }
                                 </div>
                                 <span className="text-gray-300 text-sm ">From: {head.date_from} {head.date_to ? ` till ${head.date_to}` : " till present"}</span>
@@ -117,10 +133,10 @@ export default function FamilyPage() {
                 details={family.family_origin ? family.family_origin.details : "No origin details available."}
                 roles={roles}
                 isAdded={family.family_origin ? true : false}
-                onClickFn={() => { toggleModal(setFamilyOriginModal) }} />
+                onClickFn={() => { handleShowPopup('add-origin') }} />
             {
-                (showModal && familyOriginModal) && <div className="absolute w-full top-[30%]">
-                    <AddFamilyOrigin />
+                (activePopupId === 'add-origin') && <div className="absolute w-full top-[30%]">
+                    {family.family_origin ? <UpdateFamilyOrigin origin={family.family_origin.details} /> : <AddFamilyOrigin />}
                 </div>
             }
 
@@ -128,10 +144,10 @@ export default function FamilyPage() {
                 details={family.family_house_info ? family.family_house_info.details : "No house information available."}
                 roles={roles}
                 isAdded={family.family_house_info ? true : false}
-                onClickFn={() => { toggleModal(setFamilyHouseInfoModal) }} />
+                onClickFn={() => { handleShowPopup('add-house-info') }} />
             {
-                (showModal && familyHouseInfoModal) && <div className="absolute w-full ">
-                    <AddHouseInformation />
+                (activePopupId === 'add-house-info') && <div className="absolute w-full top-[30%]">
+                    {family.family_house_info ? <UpdateHouseInformation houseInformation={family.family_house_info.details} /> : <AddHouseInformation />}
                 </div>
             }
 
@@ -139,10 +155,10 @@ export default function FamilyPage() {
                 details={family.family_belief_system ? family.family_belief_system.details : "No belief system details available."}
                 roles={roles}
                 isAdded={family.family_belief_system ? true : false}
-                onClickFn={() => { toggleModal(setFamilyBeliefSystemModal) }} />
+                onClickFn={() => { handleShowPopup('add-belief-system') }} />
             {
-                (showModal && familyBeliefSystemModal) && <div className="absolute w-full top-[10%]">
-                    <AddFamilyBeliefSystem />
+                (activePopupId === 'add-belief-system') && <div className="absolute w-full top-[10%]">
+                    {family.family_belief_system ? <UpdateFamilyBeliefSystem beliefSystem={family.family_belief_system.details} /> : <AddFamilyBeliefSystem />}
                 </div>
             }
 
@@ -150,11 +166,11 @@ export default function FamilyPage() {
                 details={family.family_eulogy ? family.family_eulogy.details : "No eulogy details available."}
                 roles={roles}
                 isAdded={family.family_eulogy ? true : false}
-                onClickFn={() => { toggleModal(setFamilyEulogyModal) }}
+                onClickFn={() => { handleShowPopup('add-eulogy') }}
                 isPreserved={true} />
             {
-                (showModal && familyEulogyModal) && <div className="absolute w-full top-[15%]">
-                    <AddEulogy />
+                (activePopupId === 'add-eulogy') && <div className="absolute w-full top-[15%]">
+                    {family.family_eulogy ? <UpdateEulogy eulogy={family.family_eulogy.details} /> : <AddEulogy />}
                 </div>
             }
 
@@ -162,10 +178,10 @@ export default function FamilyPage() {
                 details={family.family_other_information ? family.family_other_information.details : "No other information available."}
                 roles={roles}
                 isAdded={family.family_other_information ? true : false}
-                onClickFn={() => { toggleModal(setFamilyOtherInfoModal) }} />
+                onClickFn={() => { handleShowPopup('add-other-info') }} />
             {
-                (showModal && familyOtherInfoModal) && <div className="absolute w-full top-[40%]">
-                    <AddOtherInformation />
+                (activePopupId === 'add-other-info') && <div className="absolute w-full top-[40%]">
+                    {family.family_other_information ? <UpdateOtherInformation otherInformation={family.family_other_information.details} /> : <AddOtherInformation />}
                 </div>
             }
 
@@ -173,19 +189,22 @@ export default function FamilyPage() {
                 <div className="flex gap-2">
                     <h2 className="text-xl font-semibold">Family Handlers in charge of these information</h2>
                     {
-                        (roles.is_author || roles.is_handler) && <button onClick={() => toggleModal(setFamilyHandlersModal)}><FaPlus /></button>
+                        (roles.is_author || roles.is_handler) && <button onClick={() => handleShowPopup('add-handler')}><FaPlus /></button>
+                    }
+                    {
+                        (activePopupId === 'add-handler') && <div className="absolute w-full top-[50%]">
+                            <AddHandler />
+                        </div>
                     }
                 </div>
                 {family.family_handlers && family.family_handlers.length > 0 ? (
                     <ul className="list-disc pl-5">
                         {family.family_handlers.map((handler) => (
                             <li key={handler.id}>
-                                <div className="flex gap-2 items-center">
-                                    {handler.operator} {roles.is_author &&
-                                        <button onClick={() => { deleteHandler(handler.operator_id, handler.operator) }}>
-                                            <FaTrash size={12} color="red" />
-                                        </button>}
-                                </div>
+                                {handler.operator} {roles.is_author &&
+                                    <button onClick={() => { deleteHandler(handler.operator_id, handler.operator) }}>
+                                        <FaTrash size={12} color="red" />
+                                    </button>}
                             </li>
                         ))}
                     </ul>
@@ -193,11 +212,6 @@ export default function FamilyPage() {
                     <p>No family handlers available.</p>
                 )}
             </div>
-            {
-                (showModal && familyHandlersModal) && <div className="absolute w-full top-[50%]">
-                    <AddHandler />
-                </div>
-            }
         </div>
     );
 }

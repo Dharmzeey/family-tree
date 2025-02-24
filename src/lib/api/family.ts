@@ -45,5 +45,5 @@ export const addEulogyApi = (familyId: string, data: any): Promise<ApiResponse> 
 export const updateEulogyApi = (familyId: string, data: any): Promise<ApiResponse> => fetchWithAuth(UPDATE_EULOGY(familyId), { method: "PUT", body: JSON.stringify(data) });
 
 export const addFamilyHeadApi = (familyId: string, data: any): Promise<ApiResponse> => fetchWithAuth(ADD_FAMILY_HEAD(familyId), { method: "POST", body: JSON.stringify(data) });
-export const updateFamilyHeadApi = (familyId: string, data: any): Promise<ApiResponse> => fetchWithAuth(UPDATE_FAMILY_HEAD(familyId), { method: "PUT", body: JSON.stringify(data) });
+export const updateFamilyHeadApi = (familyId: string, familyHeadId: string,  data: any): Promise<ApiResponse> => fetchWithAuth(UPDATE_FAMILY_HEAD(familyId, familyHeadId), { method: "PUT", body: JSON.stringify(data) });
 export const deleteFamilyHeadApi = (familyId: string, familyHeadId: string): Promise<ApiResponse> => fetchWithAuth(DELETE_FAMILY_HEAD(familyId, familyHeadId), { method: "DELETE" });

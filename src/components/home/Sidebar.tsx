@@ -30,6 +30,9 @@ export default function Sidebar() {
                         <Link href="/">Home</Link>
                     </li>
                     <li>
+                        <Link href="/profile/edit">Edit Profile</Link>
+                    </li>
+                    <li>
                         <Link href="/notifications">Notifications</Link>
                     </li>
                     <li>
@@ -43,7 +46,7 @@ export default function Sidebar() {
                     </li>
                     {(roles.is_author || roles.is_handler) && (
                         <li>
-                            <Link href="/families">Families</Link>
+                            <Link href="/families">Family Information</Link>
                         </li>
                     )}
                     <li>

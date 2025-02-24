@@ -7,6 +7,7 @@ import { RelationData } from "@/types/relatives";
 import { addOfflineRelative } from "@/lib/validation/profile";
 import { ZodIssue } from "zod";
 import { SubmitButton } from "../ui/button";
+import { getErrorField } from "@/utils/errorRenderer";
 
 const initialState = {
     message: ""
@@ -30,10 +31,6 @@ export default function RelativeForm() {
     }, [formState])
     
 
-    const getErrorForField = (fieldName: string) => {
-        return errors?.filter((error) => error.path.includes(fieldName)).map((error) => error.message).join(', '); // Combines multiple messages if any
-    };
-
     return (
         <>
             <div className="bg-[#ffffff0a] shadow-xl backdrop-blur-md w-9/12 lg:w-1/2 py-8 px-4 rounded-2xl">
@@ -47,7 +44,7 @@ export default function RelativeForm() {
                         inputId="first-name"
                         placeholder="Input Relative First Name"
                         required
-                        error={getErrorForField('relative_first_name')}
+                        error={getErrorField('relative_first_name', errors)}
                     />
                     <EditableInputFIeld
                         inputFor="last-name"
@@ -57,7 +54,7 @@ export default function RelativeForm() {
                         inputId="last-name"
                         placeholder="Input Relative Last Name"
                         required
-                        error={getErrorForField('relative_last_name')}
+                        error={getErrorField('relative_last_name', errors)}
                     />
                     <EditableInputFIeld
                         inputFor="other-name"
@@ -66,14 +63,14 @@ export default function RelativeForm() {
                         inputName="other-name"
                         inputId="other-name"
                         placeholder="Input Relative Other Name"
-                        error={getErrorForField('relative_other_name')}
+                        error={getErrorField('relative_other_name', errors)}
                     />
                     <EditableSelectField
                         label="Relative Relation"
                         name="relative-relations"
                         id="relative-relations"
                         data={relations}
-                        error={getErrorForField('relation')}
+                        error={getErrorField('relation', errors)}
                     />
                     <ImageInputField
                         inputFor="picture"
@@ -82,7 +79,7 @@ export default function RelativeForm() {
                         inputId="picture"
                         inputName="picture"
                         placeholder="Upload your Profile Picture"
-                        error={getErrorForField("picture")}
+                        error={getErrorField("picture", errors)}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD RELATIVE" />
                     {formState.error && (

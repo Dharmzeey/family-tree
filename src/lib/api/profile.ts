@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, DELETE_RELATIVE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, DELETE_RELATIVE, EDIT_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
 import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
 import { ApiResponse, PaginatedApiResponse } from "@/types/api";
 
@@ -13,7 +13,7 @@ const fetchWithAuth = async (url: string,
             ...options,
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`,
-                "Content-Type": options.body instanceof FormData ? "multipart/form-data" : "application/json",
+                // "Content-Type": options.body instanceof FormData ? "multipart/form-data" : "application/json",
                 ...options.headers
             }
         });
@@ -38,8 +38,21 @@ export async function createProfileApi(data: any): Promise<ApiResponse> {
     return fetchWithAuth(CREATE_PROFILE, { method: "POST", body: formData });
 }
 
+export async function editProfileApi(data: any): Promise<ApiResponse> {
+    const formData = new FormData();
+    formData.append('first_name', data.first_name);
+    formData.append('last_name', data.last_name);
+    formData.append('lineage_name', data.lineage_name);
+    formData.append('other_name', data.other_name);
+    if (data.picture && data.picture.size > 0) {
+        formData.append('picture', data.picture);
+    }
+
+    return fetchWithAuth(EDIT_PROFILE, { method: "PUT", body: formData });
+}
+
 export async function fetchProfileApi(): Promise<ApiResponse> {
-    return fetchWithAuth(VIEW_PROFILE, { method: "GET", cache: "force-cache" });
+    return fetchWithAuth(VIEW_PROFILE, { method: "GET"});
 }
 
 export async function viewRelativesApi(): Promise<ApiResponse> {

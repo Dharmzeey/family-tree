@@ -23,6 +23,7 @@ export default function SearchRelatives() {
 
     // Toggle popup for each card
     const [activePopupId, setActivePopupId] = useState<string | null>(null);
+    
     const handleShowPopup = (id: string) => {
         setActivePopupId(activePopupId === id ? null : id);
     };

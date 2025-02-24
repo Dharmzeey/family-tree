@@ -3,6 +3,7 @@ import { BASE_URL } from "../constants";
 
 export const FETCH_RELATIONS = `${BASE_URL}/profiles/relations/`;
 export const CREATE_PROFILE = `${BASE_URL}/profiles/create/`;
+export const EDIT_PROFILE = `${BASE_URL}/profiles/update/`;
 export const VIEW_PROFILE = `${BASE_URL}/profiles/view/`;
 
 export const SEARCH_RELATIVES = (query: string, page?: string)=> `${BASE_URL}/profiles/relatives/search/?query=${query}${page ? `&page=${page}` : ''}`;

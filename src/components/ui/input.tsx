@@ -148,9 +148,9 @@ function EditableSelectField(inputProp: EditSelectProp) {
 function ViewingInputField(inputProp: ViewInputProp) {
     return (
         <>
-            <div className="mb-3">
-                <h2 className="mb-1 text-[#030D41]">{inputProp.heading}</h2>
-                <div className="px-2 py-2 border border-input-border-color w-full rounded min-h-8">
+            <div className="my-2 w-[min(80%,40rem)]">
+                <h2 className="mb-1">{inputProp.heading}</h2>
+                <div className="px-3 py-3 border border-input-border-color w-full rounded min-h-8">
                     {inputProp.text}
                 </div>
             </div>
