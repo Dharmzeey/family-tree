@@ -17,3 +17,6 @@ export const GET_NOTIFICATIONS = `${BASE_URL}/profiles/bond-notifications/`;
 export const PROCESS_NOTIFICATIONS = `${BASE_URL}/profiles/process-bond-notifications/`;
 
 export const DELETE_RELATIVE = (id: string) => `${BASE_URL}/profiles/relatives/${id}/delete/`;
+
+export const INCLUDE_FAMILY_REQUEST = `${BASE_URL}/profiles/include-family-request/`;
+export const CONFIRM_FAMILY_REQUEST = `${BASE_URL}/profiles/confirm-family-request/`;

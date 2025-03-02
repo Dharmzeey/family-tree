@@ -82,6 +82,7 @@ export default function FamilyPage() {
     return (
         <div className="p-6 w-[90%] mx-auto shadow-lg rounded-lg  z-30">
             <h1 className="text-2xl font-bold mb-4 text-center">The family of {family.name}</h1>
+            <p className="font-bold text-xl text-gray-200">Family ID: {family.id}</p>
             <p className="font-bold text-xl text-gray-200">Author: {family.author}</p>
 
             <div className="mt-4">

@@ -1,6 +1,6 @@
 import { ActionResponse } from "@/types/api";
 import { z } from "zod";
-import { addOfflineRelativeApi, addOnlineRelativeApi, createProfileApi, editProfileApi } from "../api/profile";
+import { addOfflineRelativeApi, addOnlineRelativeApi, createProfileApi, editProfileApi, includeFamilyApi } from "../api/profile";
 
 
 export async function createProfile(
@@ -111,4 +111,23 @@ export async function addOfflineRelative(
     }
     const data = parse.data;
     return addOfflineRelativeApi(data);
+}
+
+export async function includeFamily(
+    prevState: ActionResponse,
+    formData: FormData
+): Promise<ActionResponse> {
+    const schema = z.object({
+        family_id: z.string().nonempty("First name cannot be empty")
+    });
+    const parse = schema.safeParse({
+        family_id: formData.get("family-id"),
+    });
+    if (!parse.success) {
+        return {
+            zodErrors: parse.error.errors,
+        };
+    }
+    const data = parse.data;
+    return includeFamilyApi(data);
 }

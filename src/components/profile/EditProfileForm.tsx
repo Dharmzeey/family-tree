@@ -41,6 +41,7 @@ export default function EditProfileForm() {
     }, [])
 
     if (loading) return <p>Loading....</p>
+    if (! user) return <p>Please create a user profile</p>
 
     return (
         <>
@@ -54,6 +55,7 @@ export default function EditProfileForm() {
                         height={150}
                         className="rounded-full w-16 h-16"
                     />
+                    
                     <EditableInputFIeld
                         inputFor="first-name"
                         inputText="First Name"

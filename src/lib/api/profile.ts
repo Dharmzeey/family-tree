@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchAccessTokenCookie } from "@/utils/cookies";
-import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CREATE_PROFILE, DELETE_RELATIVE, EDIT_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
+import { ADD_OFFLINE_RELATIVE, ADD_ONLINE_RELATIVES, CONFIRM_FAMILY_REQUEST, CREATE_PROFILE, DELETE_RELATIVE, EDIT_PROFILE, FETCH_RELATIONS, GET_NOTIFICATIONS, INCLUDE_FAMILY_REQUEST, PROCESS_NOTIFICATIONS, SEARCH_RELATIVES, VIEW_PROFILE, VIEW_RELATIVES, VIEW_USER_RELATIVES } from "../endpoints/profile";
 import { handleApiResponse, handlePaginatedApiResponse } from "@/utils/apiResponse";
 import { ApiResponse, PaginatedApiResponse } from "@/types/api";
 
@@ -13,7 +13,7 @@ const fetchWithAuth = async (url: string,
             ...options,
             headers: {
                 Authorization: `Bearer ${token?.value || ""}`,
-                // "Content-Type": options.body instanceof FormData ? "multipart/form-data" : "application/json",
+                "Content-Type":  "application/json",
                 ...options.headers
             }
         });
@@ -107,4 +107,12 @@ export async function searchRelativeApi(query: string, page?: string): Promise<P
 
 export async function deleteRelativeApi(id: string): Promise<ApiResponse> {
     return fetchWithAuth(DELETE_RELATIVE(id), { method: "DELETE" });
+}
+
+export async function includeFamilyApi(data: any): Promise<ApiResponse> {
+    return fetchWithAuth(INCLUDE_FAMILY_REQUEST, { method: "POST", body: JSON.stringify(data) });
+}
+
+export async function confirmFamilyRequestApi(data: any): Promise<ApiResponse> {
+    return fetchWithAuth(CONFIRM_FAMILY_REQUEST, { method: "POST", body: JSON.stringify(data) });
 }
