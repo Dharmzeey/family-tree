@@ -31,6 +31,7 @@ export default function Sidebar() {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
+        // This will extract family ID from the local storage for a non author and a non handler
         setFamilyId(user.family_id)
     },[])
 
