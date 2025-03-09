@@ -6,4 +6,4 @@ type Pagination = {
     previous: string | null;
 };
 
-// export type { Pagination };
+export type { Pagination };

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { SubmitButton } from "../ui/button";
 import { EditableInputFIeld, ImageInputField } from "../ui/input";
 import { getErrorField } from "@/utils/errorRenderer";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import Image from "next/image";
 
 const initialState = {
@@ -18,7 +18,7 @@ const initialState = {
 export default function EditProfileForm() {
     const [state, formAction] = useActionState(editProfile, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
-    const [user, setUser] = useState<ProfileData>()
+    const [user, setUser] = useState<GetProfileData>()
     const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter();
 

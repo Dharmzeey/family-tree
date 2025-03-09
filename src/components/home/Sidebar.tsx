@@ -26,14 +26,17 @@ export default function Sidebar() {
 
     useEffect(() => {
         // This will delay a bit so as for the app to get if the user is logged in or not
-        setTimeout(() => setLoggedIn(true), 2000)
+        setTimeout(() => setLoggedIn(true), 1000)
     }, [])
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        // This will extract family ID from the local storage for a non author and a non handler
-        setFamilyId(user.family_id)
-    },[])
+        const getUser = localStorage.getItem('user') || undefined;
+        if (getUser !== undefined) {
+            const user = JSON.parse(getUser);
+            // This will extract family ID from the local storage for a non author and a non handler
+            setFamilyId(user.family_id)
+        }
+    }, [])
 
     return (
         <>

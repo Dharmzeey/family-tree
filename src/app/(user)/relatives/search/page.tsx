@@ -3,16 +3,18 @@
 import HandleRelativeSearch from "@/components/home/RelativeSearch";
 import SearchRelativeCard from "@/components/home/SearchRelativeCard";
 import { searchRelativeApi } from "@/lib/api/profile";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function SearchRelatives() {
+function PerformSearch() {
+
+    const router = useRouter();
     const searchParams = useSearchParams();
+    console.log(searchParams)
     const queryParams = searchParams.get("query");
     const pageParams = searchParams.get("page") || undefined;
-    const router = useRouter();
-    const [searchResult, setSearchResult] = useState<ProfileData[] | null>(null);
+    const [searchResult, setSearchResult] = useState<GetProfileData[] | null>(null);
     // These below is for pagination
     // an example is 
     // "next": "http://localhost:8000/v1/profiles/relatives/search/?page=3&queryyy=a",
@@ -23,7 +25,7 @@ export default function SearchRelatives() {
 
     // Toggle popup for each card
     const [activePopupId, setActivePopupId] = useState<string | null>(null);
-    
+
     const handleShowPopup = (id: string) => {
         setActivePopupId(activePopupId === id ? null : id);
     };
@@ -36,7 +38,7 @@ export default function SearchRelatives() {
 
                 const results = await searchRelativeApi(queryParams, pageParams); // the pageParams is optional
                 if (results.status === 200) {
-                    setSearchResult(results.data);
+                    setSearchResult(results.data as unknown as GetProfileData[]);
                     if (results.pagination) {
                         setNextUrl(results.pagination.next);
                         setPrevUrl(results.pagination.previous);
@@ -140,4 +142,12 @@ export default function SearchRelatives() {
             </div>
         </>
     );
+}
+
+export default function SearchRelative() {
+    return (
+        <Suspense fallback={<h1>Loading...</h1>}>
+            <PerformSearch />
+        </Suspense>
+    )
 }

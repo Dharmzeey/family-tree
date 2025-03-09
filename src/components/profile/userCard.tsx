@@ -1,8 +1,8 @@
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import Image from "next/image";
 
 type prop = {
-    user: ProfileData
+    user: GetProfileData
 }
 
 export default function UserCard({ user }: prop) {

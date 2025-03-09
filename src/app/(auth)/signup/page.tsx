@@ -14,7 +14,7 @@ const initialState = {
 };
 
 export default function SignupPage() {
-    const [state, formAction, pending] = useActionState(createUser, initialState);
+    const [state, formAction] = useActionState(createUser, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
     const router = useRouter();
     useEffect(() => {
@@ -90,7 +90,7 @@ export default function SignupPage() {
                         )}
                     </form>
                     <div className="flex flex-col items-center gap-1 mt-3">
-                    <p className="text-sm text-gray-200">
+                        <p className="text-sm text-gray-200">
                             Already have an account?{" "}
                             <Link href="/login" className="text-blue-600 hover:text-blue-700 underline">
                                 Login

@@ -1,40 +1,46 @@
 "use client";
 
 import { fetchProfileApi } from "@/lib/api/profile";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/stores/userStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserCard from "@/components/profile/userCard";
 
 
 export default function Home() {
     const { user, setUser } = useUserStore();
+    const [error, setError] = useState<string | null>(null);
 
     const router = useRouter()
 
-    const fetchAndSetProfile = async () => {
-        try {
-            const fetchProfile = await fetchProfileApi();
-
-            if (fetchProfile.status === 404) {
-                router.push("/profile/create");
-            }
-
-            const profile: ProfileData = fetchProfile.data;
-            setUser(profile);
-        } catch (error) {
-            console.error("Error fetching profile:", error);
-        }
-    };
-
     useEffect(() => {
+
+        const fetchAndSetProfile = async () => {
+            try {
+                const fetchProfile = await fetchProfileApi();
+
+                if (fetchProfile.status === 404) {
+                    router.push("/profile/create");
+                }
+                else if (fetchProfile.status === 200) {
+                    const profile: GetProfileData = fetchProfile.data as unknown as GetProfileData;
+                    setUser(profile);
+                }
+                else if (fetchProfile.status === 500) {
+                    setError(fetchProfile.error!)
+                }
+            } catch {
+                console.error("Error fetching profile:");
+            }
+        };
+
         if (!user) {
             fetchAndSetProfile();
         }
-    }, [user]);
+    }, [user, router, setUser]);
 
-
+    if (error) return <div className="flex justify-center items-center">{error}</div>
     return (
         <>
             {
@@ -43,7 +49,7 @@ export default function Home() {
                         <UserCard user={user} />
                     </div>
                 ) : (
-                    <h1 className="flex justify-center items-center">Loading...</h1>
+                    <div className="flex justify-center items-center">Loading...</div>
                 )
             }
         </>

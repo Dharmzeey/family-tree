@@ -7,7 +7,7 @@ export async function addFamilyHead(
     formData: FormData
 ): Promise<ActionResponse> {
     const schema = z.object({
-        person_id: z.string().nonempty("This field cannot be empty"),
+        familyHead_id: z.string().nonempty("This field cannot be empty"),
         date_from: z.string().pipe(z.coerce.date().transform((date) => date.toISOString().split('T')[0])),
         date_to: z
         .union([z.string().length(0), z.string().min(4)]) // Allow empty string or undefined
@@ -15,7 +15,7 @@ export async function addFamilyHead(
         comment: z.string(),
     });
     const parse = schema.safeParse({
-        person_id: formData.get("person-id"),
+        familyHead_id: formData.get("person-id"),
         date_from: formData.get("date-from"),
         date_to: formData.get("date-to"),
         comment: formData.get("comment"),

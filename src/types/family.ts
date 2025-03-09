@@ -36,3 +36,13 @@ export type FamilyData = {
     name: string;
     author: string;
 };
+
+type FamilyHeadData = {
+    familyHead_id: string;
+    comment: string;
+    date_from: string;
+    date_to?: string | undefined;   
+}
+
+
+export type { FamilyHeadData }

@@ -20,7 +20,7 @@ export default function RelativeForm() {
     useEffect(() => {
         async function getRelations() {
             await fetchRelationsApi().then((response) => {
-                setRelations(response.data)
+                setRelations(response.data as RelationData[])
             })
         }
         getRelations();

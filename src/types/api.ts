@@ -1,13 +1,14 @@
 import { ZodIssue } from "zod";
+import { Pagination } from "./pagination";
 
-interface ApiResponse<T = any> {
+interface ApiResponse {
     // This is typical of the api response from the BE server
     status?: number;
     message?: string;
     token?: string | null;
     error?: string | null;
     errors?: Record<string, string[]>;
-    data?: T;
+    data?: Record<string, unknown> | Record<string, unknown>[];
 };
 
 interface ActionResponse extends ApiResponse {
@@ -20,5 +21,5 @@ interface PaginatedApiResponse extends ApiResponse {
 }
 
 
-export type { ApiResponse,  ActionResponse, PaginatedApiResponse }
+export type { ApiResponse, ActionResponse, PaginatedApiResponse }
 

@@ -18,6 +18,7 @@ import UpdateFamilyOrigin from "@/components/family/UpdateFamilyOrigin";
 import UpdateEulogy from "@/components/family/UpdateEulogy";
 import UpdateOtherInformation from "@/components/family/UpdateOtherInfo";
 import UpdateFamilyHead from "@/components/family/UpdateFamilyHead";
+import Link from "next/link";
 
 export default function FamilyPage() {
     const [roles, setRoles] = useState<{ is_author: boolean, is_handler: boolean }>({ is_author: false, is_handler: false });
@@ -47,7 +48,7 @@ export default function FamilyPage() {
             }
             const response = await viewFamilyApi(familyId);
             if (response.status === 200) {
-                setFamily(response.data)
+                setFamily(response.data as FamilyData)
             } else {
                 setError(response.error);
             }
@@ -76,7 +77,7 @@ export default function FamilyPage() {
 
 
     if (loading) return <p className="flex justify-center items-center">Loading family details...</p>;
-    if (error) return <p className="flex justify-center items-center">{error}</p>;
+    if (error) return  <div className="flex flex-col gap-2 justify-center items-center">{error} <p><Link href="/" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"> Go Home </Link></p>  </div>;
     if (!family) return <p className="flex justify-center items-center">No family data available.</p>;
 
     return (

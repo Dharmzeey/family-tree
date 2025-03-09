@@ -4,7 +4,6 @@ import Image from "next/image";
 import { RelativesData } from "@/types/relatives";
 import { ActionButton } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { FaTrash } from "react-icons/fa";
 import { deleteRelativeApi } from "@/lib/api/profile";
 
 type RelativeProps = {

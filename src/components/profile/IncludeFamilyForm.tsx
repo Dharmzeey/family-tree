@@ -23,24 +23,29 @@ export default function IncludeFamilyForm() {
         setErrors(formState.zodErrors);
     }, [formState]);
 
-    const confirmRequest = async () => {
-        console.log(formState.data.family_id)
-        const response = await confirmFamilyRequestApi({ family_id: formState.data.id })
-        if (response.status === 200) {
-            alert("Family included successfully")
-            router.push("/")
-        } else {
-            alert(response.error)
-        }
-    }
-
     useEffect(() => {
-        if (formState.status === 200) {
-            if (confirm(`Are you sure you want to include this family in your profile? \n\nName: ${formState.data.name}'s family \n\nNB: There is not further edit or deletion afterwards`)) {
+
+        const confirmRequest = async () => {
+            if (formState.data) {
+                const id = (formState.data as Record<string, unknown>).id as string;
+                const response = await confirmFamilyRequestApi({ family_id: id })
+                if (response.status === 200) {
+                    alert("Family included successfully")
+                    router.push("/")
+                } else {
+                    alert(response.error)
+                }
+            }
+
+        }
+
+        if (formState.data && formState.status === 200) {
+            const name = (formState.data as Record<string, unknown>).name as string;
+            if (confirm(`Are you sure you want to include this family in your profile? \n\nName: ${name}'s family \n\nNB: There is not further edit or deletion afterwards`)) {
                 confirmRequest()
             }
         }
-    }, [formState, confirmRequest])
+    }, [formState, router])
 
     return (
         <>

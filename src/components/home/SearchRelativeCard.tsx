@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import { ActionButton } from "../ui/button";
 import AddOnlineRelativePopUp from "./AddRelativePopUp";
 
 
 type SearchRelativeCardProps = {
-    result: ProfileData;
+    result: GetProfileData;
     isPopupShown: boolean;
     onShowPopup: () => void;
 };

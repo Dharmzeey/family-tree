@@ -2,18 +2,15 @@
 import RelativeCard from "@/components/home/RelativeCard";
 import UserCard from "@/components/profile/userCard";
 import { viewUserRelativesApi } from "@/lib/api/profile";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import { RelativesData } from "@/types/relatives";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback, use } from "react";
 
-type Props = {
-    params: {
-        id: string;
-    }
-}
+type Params = Promise<{ id: string; }>
 
-export default function UserRelatives({ params }: Props) {
-    const [user, setUser] = useState<ProfileData>()
+export default function UserRelatives( props : { params: Params }) {
+    const params = use(props.params)
+    const [user, setUser] = useState<GetProfileData>()
     const [error, setError] = useState<string | null | undefined>()
     const [relatives, setRelatives] = useState<RelativesData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -21,22 +18,27 @@ export default function UserRelatives({ params }: Props) {
 
 
     useEffect(() => {
-        async function getRelatives() {
-            const { id } = await params;
+        async function getRelatives() {            
+            const  id = params.id;
             const fetchRelatives = await viewUserRelativesApi(id);
             if (fetchRelatives.status === 200) {
-                const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);
-                setUser(fetchRelatives.data.user)
-                setRelatives(allRelatives);
+                if (fetchRelatives.data) {
+                    const data = fetchRelatives.data as { relatives: RelativesData[], offline_relatives: RelativesData[] };
+                    const allRelatives = data.relatives.concat(data.offline_relatives);
+                    setUser((fetchRelatives.data as { user: GetProfileData }).user);
+                    setRelatives(allRelatives);
+                } else {
+                    setError('Data is undefined');
+                }
             } else {
                 setError(fetchRelatives.error)
             }
             setLoading(false);
         }
         getRelatives();
-    }, []);
+    }, [params.id]);
 
-    const drawLines = () => {
+    const drawLines = useCallback(() => {
         if (userCardRef.current && relatives.length > 0) {
             // Remove existing SVG elements
             const existingSvgs = userCardRef.current.querySelectorAll('svg');
@@ -74,11 +76,11 @@ export default function UserRelatives({ params }: Props) {
                 });
             }
         }
-    };
+    }, [relatives]);
 
     useEffect(() => {
         drawLines();
-    }, [relatives]);
+    }, [relatives, drawLines]);
 
     useEffect(() => {
         let timeoutId: NodeJS.Timeout;
@@ -95,7 +97,7 @@ export default function UserRelatives({ params }: Props) {
             window.removeEventListener('resize', handleResize);
             clearTimeout(timeoutId);
         };
-    }, [relatives]);
+    }, [relatives, drawLines]);
 
     return (
         <>

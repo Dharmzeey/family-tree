@@ -90,7 +90,7 @@ export default function SignupPage() {
 					</form>
 					<div className="flex flex-col items-center gap-1 mt-3">
 						<p className="text-sm text-gray-200">
-							Don't have an account?{" "}
+							Don&apos;t have an account? &nbsp;
 							<Link href="/signup" className="text-blue-600 hover:text-blue-700 underline">
 								Sign up
 							</Link>

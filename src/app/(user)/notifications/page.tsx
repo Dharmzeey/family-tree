@@ -16,7 +16,7 @@ export default function NotificationPage() {
         const fetchNotifications = async () => {
             const response = await getNotificationsApi()
             if (response.status === 200) {
-                setNotifications(response.data)
+                setNotifications(response.data as NotificationData[])
             } else {
                 setError(response.error)
             }

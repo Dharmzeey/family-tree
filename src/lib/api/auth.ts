@@ -33,8 +33,8 @@ export async function createUserApi(data: CreateUserData): Promise<ApiResponse> 
             default:
                 return { error: "Failed to sign up." };
         }
-    } catch (error) {
-        return { error: `An error occurred during signup. ${error}` };
+    } catch  {
+        return { error: `An error occurred during signup. ` };
     }
 }
 
@@ -52,7 +52,7 @@ export async function verifyCodeApi(data: PinVerificationData): Promise<ApiRespo
             body: JSON.stringify(data),
         });
         return handleApiResponse(response)
-    } catch (error) {
+    } catch {
         return { message: "An error occurred during pin verification." };
     }
 }
@@ -68,7 +68,7 @@ export async function resendEmailVerificationApi(): Promise<ApiResponse> {
             },
         });
         return handleApiResponse(response)
-    } catch (error) {
+    } catch {
         return { error: "An error occurred during PIN request." };
     }
 }
@@ -104,7 +104,7 @@ export async function loginUserApi(data: LoginUserData): Promise<ApiResponse> {
             default:
                 return { error: "Failed to Log user in." };
         }
-    } catch (error) {
+    } catch {
         return { message: "An error occurred during login in." };
     }
 }
@@ -119,7 +119,7 @@ export async function forgotPasswordApi(data: ForgotPasswordData): Promise<ApiRe
             body: JSON.stringify(data),
         });
         return handleApiResponse(response)
-    } catch (error) {
+    } catch {
         return { error: "An error occurred during PIN request." };
     }
 }
@@ -136,7 +136,7 @@ export async function verifyResetCodeApi(data: ResetPasswordPinData): Promise<Ap
             body: JSON.stringify(data),
         });
         return handleApiResponse(response)
-    } catch (error) {
+    } catch {
         return { error: "An error occurred during pin verification." };
     }
 }
@@ -152,7 +152,7 @@ export async function createNewPasswordApi(data: CreateNewPasswordData): Promise
             body: JSON.stringify(data)
         });
         return handleApiResponse(response)
-    } catch (error) {
+    } catch {
         return { error: "An error occurred during password reset" };
     }
 }

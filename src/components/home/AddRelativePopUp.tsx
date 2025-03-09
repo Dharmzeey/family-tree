@@ -6,7 +6,7 @@ import { useActionState, useEffect, useState } from "react"
 import { ZodIssue } from "zod";
 import { EditableSelectField } from "../ui/input";
 import { addOnlineRelative } from "@/lib/validation/profile";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import { SubmitButton } from "../ui/button";
 import { getErrorField } from "@/utils/errorRenderer";
 
@@ -14,14 +14,14 @@ const initialState = {
     message: ""
 }
 
-export default function AddOnlineRelativePopUp(relative: { profile: ProfileData }) {
+export default function AddOnlineRelativePopUp(relative: { profile: GetProfileData }) {
     const [relations, setRelations] = useState<RelationData[]>();
     const [formState, formAction] = useActionState(addOnlineRelative, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
     useEffect(() => {
         async function getRelations() {
             await fetchRelationsApi().then((response) => {
-                setRelations(response.data)
+                setRelations(response.data as RelationData[])
             })
         }
         getRelations();

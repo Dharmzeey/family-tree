@@ -3,14 +3,14 @@ import RelativeCard from "@/components/home/RelativeCard";
 import UserCard from "@/components/profile/userCard";
 import { viewRelativesApi } from "@/lib/api/profile";
 // import useUserStore from "@/stores/userStore";
-import { ProfileData } from "@/types/profile";
+import { GetProfileData } from "@/types/profile";
 import { RelativesData } from "@/types/relatives";
 import { redirect } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 export default function Relatives() {
     // const { user, initialize } = useUserStore();
-    const [user, setUser] = useState<ProfileData>()
+    const [user, setUser] = useState<GetProfileData>()
     const [error, setError] = useState<string | null | undefined>()
     const [relatives, setRelatives] = useState<RelativesData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -26,9 +26,12 @@ export default function Relatives() {
             if (fetchRelatives.status === 404 && fetchRelatives.error === "User profile does not exist. Please create a profile first.") {
                 redirect('/profile/create');
             } else if (fetchRelatives.status === 200) {
-                const allRelatives = fetchRelatives.data.relatives.concat(fetchRelatives.data.offline_relatives);
-                setUser(fetchRelatives.data.user)
-                setRelatives(allRelatives);
+                if (fetchRelatives.data) {
+                    const data = fetchRelatives.data as { relatives: RelativesData[], offline_relatives: RelativesData[] }
+                    const allRelatives = data.relatives.concat(data.offline_relatives);
+                    setUser((fetchRelatives.data as { user: GetProfileData }).user);
+                    setRelatives(allRelatives);
+                }
             } else {
                 setError(fetchRelatives.error)
             }
@@ -37,7 +40,7 @@ export default function Relatives() {
         getRelatives();
     }, []);
 
-    const drawLines = () => {
+    const drawLines = useCallback(() => {
         if (userCardRef.current && relatives.length > 0) {
             // Remove existing SVG elements
             const existingSvgs = userCardRef.current.querySelectorAll('svg');
@@ -75,11 +78,13 @@ export default function Relatives() {
                 });
             }
         }
-    };
+    }, [relatives]);
+
 
     useEffect(() => {
         drawLines();
-    }, [relatives]);
+    }, [relatives, drawLines]);
+
 
     useEffect(() => {
         let timeoutId: NodeJS.Timeout;
@@ -96,7 +101,7 @@ export default function Relatives() {
             window.removeEventListener('resize', handleResize);
             clearTimeout(timeoutId);
         };
-    }, [relatives]);
+    }, [relatives, drawLines]);
 
     return (
         <>

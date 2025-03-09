@@ -1,11 +1,19 @@
-type ProfileData = {
-    id: string;
+interface BaseProfileData  {
     lineage_name: string;
     last_name: string;
     first_name: string;
     other_name: string;
-    picture: string;
 };
+
+
+interface SendProfileData extends BaseProfileData{
+    picture: File;
+}
+
+interface GetProfileData extends BaseProfileData{
+    id: string
+    picture: string;
+}
 
 type NotificationData = {
     id: string;
@@ -16,4 +24,13 @@ type NotificationData = {
     picture: string;
 };
 
-export type { ProfileData, NotificationData }
+type OfflineRelativesData = {
+    id?: string;
+    first_name: string;
+    last_name: string;
+    other_name: string;
+    relation: string;
+    picture?: File;
+}
+
+export type { SendProfileData, GetProfileData, NotificationData, OfflineRelativesData }
