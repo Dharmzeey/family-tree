@@ -11,7 +11,6 @@ function PerformSearch() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    console.log(searchParams)
     const queryParams = searchParams.get("query");
     const pageParams = searchParams.get("page") || undefined;
     const [searchResult, setSearchResult] = useState<GetProfileData[] | null>(null);

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 export default function NotificationPage() {
     const [notifications, setNotifications] = useState<NotificationData[]>([])
     const [error, setError] = useState<string | null | undefined>(null)
+    const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter()
 
     useEffect(() => {
@@ -20,6 +21,7 @@ export default function NotificationPage() {
             } else {
                 setError(response.error)
             }
+            setLoading(false);
         }
 
         fetchNotifications()
@@ -40,6 +42,8 @@ export default function NotificationPage() {
             setNotifications(prevData => prevData?.filter(item => item.id != id)); // Remove the item from the state
         }
     }
+
+    if (loading) return <div className="flex justify-center items-center">Loading...</div>
 
     return (
         <>

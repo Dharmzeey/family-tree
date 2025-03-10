@@ -18,7 +18,6 @@ const useUserStore = create(
                 }
             },
             setUser: (user) => {
-                console.log(user)
                 set({ user });
                 localStorage.setItem('user', JSON.stringify(user));
             },

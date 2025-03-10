@@ -7,7 +7,7 @@ interface BaseProfileData  {
 
 
 interface SendProfileData extends BaseProfileData{
-    picture: File;
+    picture: any;
 }
 
 interface GetProfileData extends BaseProfileData{

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 export default function Sidebar() {
     const [roles, setRoles] = useState<{ is_author: boolean, is_handler: boolean }>({ is_author: false, is_handler: false });
     const [loggedIn, setLoggedIn] = useState(false)
-    const [familyId, setFamilyId] = useState<string>('')
+    const [familyId, setFamilyId] = useState<string | undefined>(undefined)
     const router = useRouter()
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function Sidebar() {
         if (getUser !== undefined) {
             const user = JSON.parse(getUser);
             // This will extract family ID from the local storage for a non author and a non handler
-            setFamilyId(user.family_id)
+            if (user.family_id) setFamilyId(user.family_id)
         }
     }, [])
 
@@ -64,7 +64,7 @@ export default function Sidebar() {
                             <li>
                                 <Link href="/relatives/add">Add Offline Relatives</Link>
                             </li>
-                            {(roles.is_author || roles.is_handler) || (familyId) ? (
+                            {roles.is_author || roles.is_handler || familyId != undefined ? (
                                 <li>
                                     <Link href="/families">Family Information</Link>
                                 </li>

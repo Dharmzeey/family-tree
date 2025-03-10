@@ -10,13 +10,19 @@ const fetchWithAuth = async (url: string,
     options: { method?: string, body?: string | FormData, cache?: RequestCache, headers?: Record<string, string> } = {}) => {
     try {
         const token = await fetchAccessTokenCookie();
+        const headers: Record<string, string> = {
+            Authorization: `Bearer ${token?.value || ""}`,
+            ...options.headers
+        };
+        // Only assign a 'Content-Type' header if the body is not an instance of FormData
+
+        if (!(options.body instanceof FormData)) {
+            headers["Content-Type"] = "application/json";
+        }
+
         const response = await fetch(url, {
             ...options,
-            headers: {
-                Authorization: `Bearer ${token?.value || ""}`,
-                "Content-Type": "application/json",
-                ...options.headers
-            }
+            headers
         });
         return handleApiResponse(response);
     } catch {
