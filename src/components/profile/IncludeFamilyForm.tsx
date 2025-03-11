@@ -31,7 +31,7 @@ export default function IncludeFamilyForm() {
                 const response = await confirmFamilyRequestApi({ family_id: id })
                 if (response.status === 200) {
                     alert("Family included successfully")
-                    router.push("/")
+                    router.replace("/")
                 } else {
                     alert(response.error)
                 }

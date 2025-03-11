@@ -132,7 +132,7 @@ export default function FamilyPage() {
             </div>
 
             <FamilyInfo heading="Origin"
-                details={family.family_origin ? family.family_origin.details : "No origin details available."}
+                details={family.family_origin ? family.family_origin.details : "No Information on Origin."}
                 roles={roles}
                 isAdded={family.family_origin ? true : false}
                 onClickFn={() => { handleShowPopup('add-origin') }} />
@@ -143,7 +143,7 @@ export default function FamilyPage() {
             }
 
             <FamilyInfo heading="House Information"
-                details={family.family_house_info ? family.family_house_info.details : "No house information available."}
+                details={family.family_house_info ? family.family_house_info.details : "House information not filled."}
                 roles={roles}
                 isAdded={family.family_house_info ? true : false}
                 onClickFn={() => { handleShowPopup('add-house-info') }} />
@@ -165,7 +165,7 @@ export default function FamilyPage() {
             }
 
             <FamilyInfo heading="Eulogy"
-                details={family.family_eulogy ? family.family_eulogy.details : "No eulogy details available."}
+                details={family.family_eulogy ? family.family_eulogy.details : "No eulogy available."}
                 roles={roles}
                 isAdded={family.family_eulogy ? true : false}
                 onClickFn={() => { handleShowPopup('add-eulogy') }}
