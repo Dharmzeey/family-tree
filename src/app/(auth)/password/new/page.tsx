@@ -1,7 +1,7 @@
 'use client';
 
 import { SubmitButton } from "@/components/ui/button";
-import { EditableInputFIeld } from "@/components/ui/input";
+import { EditableInputFIeld, PasswordField } from "@/components/ui/input";
 import { createNewPassword } from "@/lib/validation/auth";
 import { getErrorField } from "@/utils/errorRenderer";
 import { useRouter } from "next/navigation";
@@ -68,26 +68,22 @@ export default function CreateNewPassword() {
                 <div className="bg-[#ffffff0a] backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md">
                     <h2 className="text-2xl font-bold mb-6 text-center">Create New Password</h2>
                     <form action={formAction} className="flex flex-col justify-center items-center w-full">
-                        <EditableInputFIeld
+                        <PasswordField
                             inputFor="password"
                             inputText="New Password"
-                            inputType="password"
                             inputId="password"
                             inputName="password"
                             placeholder="Input your new password"
-                            required
                             error={getErrorField('password', errors)}
                         />
 
-                        <EditableInputFIeld
+                        <PasswordField
                             inputFor="confirm-password"
                             inputText="Confirm Password"
-                            inputType="password"
                             inputId="confirm-password"
                             inputName="confirm-password"
                             placeholder="Confirm your new password"
-                            required
-                            error={getErrorField('password', errors)}
+                            error={getErrorField('confirm_password', errors)}
                         />
                         {/* Include hidden inputs for resetEmail and resetToken */}
                         <input type="hidden" name="reset-email" value={resetEmail || ""} />

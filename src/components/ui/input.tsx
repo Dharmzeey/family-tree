@@ -1,4 +1,5 @@
 import { RelationData } from "@/types/relatives";
+import { useState } from "react";
 
 type EditInputProp = {
     inputFor: string;
@@ -7,10 +8,18 @@ type EditInputProp = {
     inputId: string;
     inputName: string;
     placeholder: string;
-    inputValue?: string;
     defaultValue?: string;
     required?: boolean
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    error?: string;
+};
+
+type PasswordProp = {
+    inputFor: string;
+    inputText: string;
+    inputId: string;
+    inputName: string;
+    placeholder: string;
     error?: string;
 };
 
@@ -20,7 +29,6 @@ type EditTextAreaProp = {
     inputText: string;
     inputId: string;
     inputName: string;
-    inputValue?: string;
     defaultValue?: string;
     required?: boolean
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -57,13 +65,48 @@ function EditableInputFIeld(inputProp: EditInputProp) {
                     required={inputProp.required}
                     placeholder={inputProp.placeholder}
                     className="mt-1 block w-full px-3 py-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={inputProp.inputValue}
                     defaultValue={inputProp.defaultValue}
                     onChange={inputProp.onChange}
                 />
                 {/* Render error message if it exists */}
                 {inputProp.error && <p style={{ color: 'red' }}>{inputProp.error}</p>}
 
+            </div>
+        </>
+    );
+}
+
+function PasswordField(passwordProp: PasswordProp) {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    return (
+        <>
+            <div className="my-2 w-[min(80%,40rem)]">
+                <label htmlFor={passwordProp.inputFor} className="text-sm font-medium">{passwordProp.inputText}</label> <span className="text-red-600 text-xl">*</span>
+                <br />
+                <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id={passwordProp.inputId}
+                        name={passwordProp.inputName}
+                        required
+                        placeholder={passwordProp.placeholder}
+                        className="mt-1 block w-full px-3 py-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-3 flex items-center text-sm text-blue-500 focus:outline-none focus:font-extrabold"
+                    >
+                        {showPassword ? "Hide" : "Show"}
+                    </button>
+                </div>
+                {/* Render error message if it exists */}
+                {passwordProp.error && <p style={{ color: 'red' }}>{passwordProp.error}</p>}
             </div>
         </>
     );
@@ -84,7 +127,6 @@ function ImageInputField(inputProp: EditInputProp) {
                     required={inputProp.required}
                     placeholder={inputProp.placeholder}
                     className="mt-1 block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={inputProp.inputValue}
                     defaultValue={inputProp.defaultValue}
                     onChange={inputProp.onChange}
                     accept="image/*"
@@ -110,7 +152,6 @@ function EditableTextAreaFIeld(inputProp: EditTextAreaProp) {
                     // will be required by default, it will be turned off when the component is invoked
                     required={inputProp.required}
                     className="mt-1 block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={inputProp.inputValue}
                     defaultValue={inputProp.defaultValue}
                     onChange={inputProp.onChange}
                     rows={7}
@@ -159,4 +200,4 @@ function ViewingInputField(inputProp: ViewInputProp) {
 }
 
 
-export { EditableInputFIeld, EditableTextAreaFIeld, EditableSelectField, ImageInputField, ViewingInputField };
+export { EditableInputFIeld, EditableTextAreaFIeld, EditableSelectField, PasswordField, ImageInputField, ViewingInputField };

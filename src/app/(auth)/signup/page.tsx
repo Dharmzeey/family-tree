@@ -1,7 +1,7 @@
 "use client";
 
 import { SubmitButton } from "@/components/ui/button";
-import { EditableInputFIeld } from "@/components/ui/input";
+import { EditableInputFIeld, PasswordField } from "@/components/ui/input";
 import { createUser } from "@/lib/validation/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -57,24 +57,20 @@ export default function SignupPage() {
                             required
                             error={getErrorField('phone_number', errors)}
                         />
-                        <EditableInputFIeld
+                        <PasswordField
                             inputFor="password"
                             inputText="Password"
-                            inputType="password"
                             inputId="password"
                             inputName="password"
                             placeholder="Input your Password"
-                            required
                             error={getErrorField('password', errors)}
                         />
-                        <EditableInputFIeld
+                        <PasswordField
                             inputFor="confirm-password"
                             inputText="Confirm Password"
-                            inputType="password"
                             inputId="confirm-password"
                             inputName="confirm-password"
                             placeholder="Retype your password"
-                            required
                             error={getErrorField('confirm_password', errors)}
                         />
 

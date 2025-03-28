@@ -20,7 +20,6 @@ export default function ForgotPassword() {
     const router = useRouter()
     useEffect(() => {
         if (state.status === 200) {
-            console.log(state)
             // Store both email and token in localStorage
             if (state.token) {
                 localStorage.setItem('resetEmail', email);
@@ -51,7 +50,6 @@ export default function ForgotPassword() {
                             inputId="email"
                             inputName="email"
                             placeholder="Input your Email"
-                            inputValue={email}
                             required
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                             error={getErrorField('email', errors)} />
