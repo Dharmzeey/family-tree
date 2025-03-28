@@ -5,7 +5,7 @@ import { SIGNUP, CONFIRM_EMAIL_VERIFICATION, SEND_EMAIL_VERIFICATION, LOGIN, FOR
 import { CreateUserData, PinVerificationData, LoginUserData, ForgotPasswordData, ResetPasswordPinData, CreateNewPasswordData } from "@/types/auth";
 import { handleAccessToken, fetchAccessTokenCookie, removeAllTokens, setRoleCookie } from "@/utils/cookies";
 // import { handleErrorsResponse } from "@/types/responseHandler";
-import { handleApiResponse } from "@/utils/apiResponse";
+import { handleApiResponse, handleTokenApiResponse } from "@/utils/apiResponse";
 import { handleErrorsResponse } from "@/utils/responseHandler";
 
 
@@ -118,7 +118,7 @@ export async function forgotPasswordApi(data: ForgotPasswordData): Promise<ApiRe
             },
             body: JSON.stringify(data),
         });
-        return handleApiResponse(response)
+        return handleTokenApiResponse(response)
     } catch {
         return { error: "An error occurred during PIN request." };
     }
@@ -135,7 +135,7 @@ export async function verifyResetCodeApi(data: ResetPasswordPinData): Promise<Ap
 
             body: JSON.stringify(data),
         });
-        return handleApiResponse(response)
+        return handleTokenApiResponse(response)
     } catch {
         return { error: "An error occurred during pin verification." };
     }

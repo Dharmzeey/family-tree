@@ -22,7 +22,7 @@ export default function SignupPage() {
             // the message will come from authApi through authAction
             // router.push("/email-verification/confirm");
             // we will implement verification later, but for now we will just be going straight to home
-            router.push("/");
+            router.push("/email-verification");
         }
     }, [state, router]);
 
