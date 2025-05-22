@@ -17,22 +17,19 @@ export default function Home() {
     useEffect(() => {
 
         const fetchAndSetProfile = async () => {
-            try {
-                const fetchProfile = await fetchProfileApi();
+            const fetchProfile = await fetchProfileApi();
 
-                if (fetchProfile.status === 404) {
-                    router.push("/profile/create");
-                }
-                else if (fetchProfile.status === 200) {
-                    const profile: GetProfileData = fetchProfile.data as unknown as GetProfileData;
-                    setUser(profile);
-                }
-                else if (fetchProfile.status === 500) {
-                    setError(fetchProfile.error!)
-                }
-            } catch {
-                console.error("Error fetching profile:");
+            if (fetchProfile.status === 404) {
+                router.push("/profile/create");
             }
+            else if (fetchProfile.status === 200) {
+                const profile: GetProfileData = fetchProfile.data as unknown as GetProfileData;
+                setUser(profile);
+            }
+            else if (fetchProfile.status === 500) {
+                setError(fetchProfile.error!)
+            }
+
         };
 
         if (!user) {
