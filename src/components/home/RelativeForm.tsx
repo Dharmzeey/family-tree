@@ -8,6 +8,7 @@ import { addOfflineRelative } from "@/lib/validation/profile";
 import { ZodIssue } from "zod";
 import { SubmitButton } from "../ui/button";
 import { getErrorField } from "@/utils/errorRenderer";
+import FormMessages from "../repsonse/formResponse";
 
 const initialState = {
     message: ""
@@ -17,6 +18,11 @@ export default function RelativeForm() {
     const [relations, setRelations] = useState<RelationData[]>();
     const [formState, formAction] = useActionState(addOfflineRelative, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("")
+    const [otherName, setOtherName] = useState("");
+    
     useEffect(() => {
         async function getRelations() {
             await fetchRelationsApi().then((response) => {
@@ -29,7 +35,7 @@ export default function RelativeForm() {
     useEffect(() => {
         setErrors(formState.zodErrors)
     }, [formState])
-    
+
 
     return (
         <>
@@ -43,8 +49,10 @@ export default function RelativeForm() {
                         inputName="first-name"
                         inputId="first-name"
                         placeholder="Input Relative First Name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                         required
-                        error={getErrorField('relative_first_name', errors)}
+                        error={getErrorField('first_name', errors)}
                     />
                     <EditableInputFIeld
                         inputFor="last-name"
@@ -53,8 +61,10 @@ export default function RelativeForm() {
                         inputName="last-name"
                         inputId="last-name"
                         placeholder="Input Relative Last Name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
                         required
-                        error={getErrorField('relative_last_name', errors)}
+                        error={getErrorField('last_name', errors)}
                     />
                     <EditableInputFIeld
                         inputFor="other-name"
@@ -63,7 +73,9 @@ export default function RelativeForm() {
                         inputName="other-name"
                         inputId="other-name"
                         placeholder="Input Relative Other Name"
-                        error={getErrorField('relative_other_name', errors)}
+                        value={otherName}
+                        onChange={(e) => setOtherName(e.target.value)}
+                        error={getErrorField('other_name', errors)}
                     />
                     <EditableSelectField
                         label="Relative Relation"
@@ -82,16 +94,7 @@ export default function RelativeForm() {
                         error={getErrorField("picture", errors)}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD RELATIVE" />
-                    {formState.error && (
-                        <div aria-live="polite" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                            {formState.error}
-                        </div>
-                    )}
-                    {formState.message && (
-                        <div aria-live="polite" className="bg-green-100 border border-green-400 text-green-600 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                            {formState.message}
-                        </div>
-                    )}
+                    <FormMessages formState={formState} errors={errors} />
                 </form>
             </div>
         </>

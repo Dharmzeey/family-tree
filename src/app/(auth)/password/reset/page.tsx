@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { ZodIssue } from "zod";
 import { getErrorField } from "@/utils/errorRenderer";
+import FormMessages from "@/components/repsonse/formResponse";
 
 const initialState = {
     message: "",
 };
 
 export default function ResetPasswordCode() {
-    const [state, formAction] = useActionState(verifyResetCode, initialState);
+    const [formState, formAction] = useActionState(verifyResetCode, initialState);
     const router = useRouter();
     const [resetEmailCount, setResetEmailCount] = useState(0);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
@@ -37,15 +38,15 @@ export default function ResetPasswordCode() {
     }, [router]);
 
     useEffect(() => {
-        if (state.status === 200) {
+        if (formState.status === 200) {
             // Store the new reset token for the final step
-            if (state.token) {
-                localStorage.setItem('resetToken', state.token);
-                alert(`${state.message}`);
+            if (formState.token) {
+                localStorage.setItem('resetToken', formState.token);
+                alert(`${formState.message}`);
                 router.push("/password/new");
             }
         }
-    }, [state, router]);
+    }, [formState, router]);
 
     // Countdown logic for resending the reset code
     useEffect(() => {
@@ -86,8 +87,8 @@ export default function ResetPasswordCode() {
     }
 
     useEffect(() => {
-        setErrors(state.zodErrors)
-    }, [state])
+        setErrors(formState.zodErrors)
+    }, [formState])
 
     return (
         <>
@@ -129,16 +130,7 @@ export default function ResetPasswordCode() {
                         <SubmitButton pendingText="Verifying..." buttonText="verify code" />
 
                         {/* Display feedback message */}
-                        {state.error && (
-                            <div aria-live="polite" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                                {state.error}
-                            </div>
-                        )}
-                        {state.message && (
-                            <div aria-live="polite" className="bg-green-100 border border-green-400 text-green-600 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                                {state.message}
-                            </div>
-                        )}
+                       <FormMessages formState={formState} errors={errors}/>
                     </form>
                 </div>
             </div>

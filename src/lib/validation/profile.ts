@@ -93,7 +93,7 @@ export async function addOfflineRelative(
     const schema = z.object({
         first_name: z.string().nonempty("First name cannot be empty"),
         last_name: z.string().nonempty("Last name cannot be empty"),
-        other_name: z.string().nonempty("Last name cannot be empty"),
+        other_name: z.string(),
         relation: z.string().nonempty("Relation cannot be empty"),
         picture: z.instanceof(File).refine(file => file.size <= 850 * 1024, "Picture must be less than 800kb")
     });

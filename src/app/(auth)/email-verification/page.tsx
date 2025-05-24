@@ -54,7 +54,7 @@ export default function EmailVerification() {
         }
     }
 
-    
+
     return (
         <>
             <div className="min-h-screen flex items-center justify-center">

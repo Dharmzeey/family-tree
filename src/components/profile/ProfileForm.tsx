@@ -8,6 +8,7 @@ import { SubmitButton } from "../ui/button";
 import { EditableInputFIeld, ImageInputField } from "../ui/input";
 import { getErrorField } from "@/utils/errorRenderer";
 import { goHome1500ms } from "@/utils/delayTimer";
+import FormMessages from "../repsonse/formResponse";
 
 const initialState = {
     message: "",
@@ -16,6 +17,12 @@ const initialState = {
 export default function ProfileForm() {
     const [formState, formAction] = useActionState(createProfile, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [otherName, setOtherName] = useState("");
+    const [lineageName, setLineageName] = useState("");
+
     const router = useRouter();
 
     useEffect(() => {
@@ -39,6 +46,8 @@ export default function ProfileForm() {
                         inputId="first-name"
                         inputName="first-name"
                         placeholder="Input your First Name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                         required
                         error={getErrorField("first_name", errors)}
                     />
@@ -49,6 +58,8 @@ export default function ProfileForm() {
                         inputId="last-name"
                         inputName="last-name"
                         placeholder="Input your Last Name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
                         required
                         error={getErrorField("last_name", errors)}
                     />
@@ -59,6 +70,8 @@ export default function ProfileForm() {
                         inputId="other-name"
                         inputName="other-name"
                         placeholder="Input your Other Name"
+                        value={otherName}
+                        onChange={(e) => setOtherName(e.target.value)}
                         error={getErrorField("other_name", errors)}
                     />
                     <EditableInputFIeld
@@ -68,6 +81,8 @@ export default function ProfileForm() {
                         inputId="lineage-name"
                         inputName="lineage-name"
                         placeholder="Input your Lineage Name"
+                        value={lineageName}
+                        onChange={(e) => setLastName(e.target.value)}
                         required
                         error={getErrorField("lineage_name", errors)}
                     />
@@ -86,24 +101,7 @@ export default function ProfileForm() {
                     <SubmitButton pendingText="Creating..." buttonText="Create Profile" />
 
                     {/* Display feedback message */}
-                    {formState.error && (
-                        <div
-                            aria-live="polite"
-                            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4"
-                            role="status"
-                        >
-                            {formState.error}
-                        </div>
-                    )}
-                    {formState.message && (
-                        <div
-                            aria-live="polite"
-                            className="bg-green-100 border border-green-400 text-green-600 px-4 py-3 rounded mt-2 text-sm mb-4"
-                            role="status"
-                        >
-                            {formState.message}
-                        </div>
-                    )}
+                    <FormMessages formState={formState} errors={errors} />
                 </form>
             </div>
         </>

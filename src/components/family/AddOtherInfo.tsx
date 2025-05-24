@@ -16,6 +16,8 @@ export default function AddOtherInformation() {
     const [formState, formAction] = useActionState(addOtherInfo, initialState)
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
 
+    const [details, setDetails] = useState("");
+
     useEffect(() => {
         setErrors(formState.zodErrors)
     }, [formState])
@@ -37,6 +39,8 @@ export default function AddOtherInformation() {
                         inputText="Add Other Information"
                         inputName="details"
                         inputId="details"
+                        value={details}
+                        onChange={(e) => setDetails(e.target.value)}
                         error={getErrorField('details', errors)}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD OTHER INFOTMATION" />

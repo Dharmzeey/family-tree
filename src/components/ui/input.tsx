@@ -9,6 +9,7 @@ type EditInputProp = {
     inputName: string;
     placeholder: string;
     defaultValue?: string;
+    value?: string;
     required?: boolean
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     error?: string;
@@ -29,6 +30,7 @@ type EditTextAreaProp = {
     inputText: string;
     inputId: string;
     inputName: string;
+    value?: string;
     defaultValue?: string;
     required?: boolean
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -66,6 +68,7 @@ function EditableInputFIeld(inputProp: EditInputProp) {
                     placeholder={inputProp.placeholder}
                     className="mt-1 block w-full px-3 py-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     defaultValue={inputProp.defaultValue}
+                    value={inputProp.value}
                     onChange={inputProp.onChange}
                 />
                 {/* Render error message if it exists */}
@@ -153,6 +156,8 @@ function EditableTextAreaFIeld(inputProp: EditTextAreaProp) {
                     required={inputProp.required}
                     className="mt-1 block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     defaultValue={inputProp.defaultValue}
+                    // placeholder={inputProp.placeholder}
+                    value={inputProp.value}
                     onChange={inputProp.onChange}
                     rows={7}
                 ></textarea>

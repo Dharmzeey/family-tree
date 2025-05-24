@@ -8,6 +8,7 @@ import { SubmitButton } from "../ui/button";
 import { EditableInputFIeld } from "../ui/input";
 import { confirmFamilyRequestApi } from "@/lib/api/profile";
 import { useRouter } from "next/navigation";
+import FormMessages from "../repsonse/formResponse";
 
 const initialState = {
     message: "",
@@ -17,6 +18,9 @@ const initialState = {
 export default function IncludeFamilyForm() {
     const [formState, formAction] = useActionState(includeFamily, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
+
+    const [familyId, setFamilyId] = useState("");
+
     const router = useRouter()
 
     useEffect(() => {
@@ -60,16 +64,14 @@ export default function IncludeFamilyForm() {
                             inputName="family-id"
                             inputId="family-id"
                             placeholder="Input Family ID"
+                            value={familyId}
+                            onChange={(e) => setFamilyId(e.target.value)}
                             required
                             error={getErrorField('family_id', errors)}
                         />
 
                         <SubmitButton pendingText="Adding..." buttonText="INCLUDE FAMILY" />
-                        {formState.error && (
-                            <div aria-live="polite" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                                {formState.error}
-                            </div>
-                        )}
+                        <FormMessages formState={formState} errors={errors} />
                     </form>
                 </div>
             </div>

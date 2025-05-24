@@ -16,6 +16,8 @@ export default function AddFamilyHead() {
     const [formState, formAction] = useActionState(addFamilyHead, initialState)
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
 
+    const [id, setId] = useState("");
+
     useEffect(() => {
         setErrors(formState.zodErrors)
     }, [formState])
@@ -38,6 +40,8 @@ export default function AddFamilyHead() {
                         inputName="person-id"
                         inputId="person-id"
                         placeholder="Input person ID"
+                        value={id}
+                        onChange={(e) => setId(e.target.value)}
                         required
                         error={getErrorField('person', errors)}
                     />

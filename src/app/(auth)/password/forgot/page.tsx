@@ -1,6 +1,7 @@
 "use client";
 
 
+import FormMessages from "@/components/repsonse/formResponse";
 import { SubmitButton } from "@/components/ui/button";
 import { EditableInputFIeld } from "@/components/ui/input";
 import { forgotPassword } from "@/lib/validation/auth";
@@ -14,27 +15,27 @@ const initialState = {
 };
 
 export default function ForgotPassword() {
-    const [state, formAction] = useActionState(forgotPassword, initialState);
+    const [formState, formAction] = useActionState(forgotPassword, initialState);
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
     const router = useRouter()
     useEffect(() => {
-        if (state.status === 200) {
+        if (formState.status === 200) {
             // Store both email and token in localStorage
-            if (state.token) {
+            if (formState.token) {
                 localStorage.setItem('resetEmail', email);
-                localStorage.setItem('resetToken', state.token);
+                localStorage.setItem('resetToken', formState.token);
 
-                alert(`${state.message}`)
+                alert(`${formState.message}`)
 
                 router.push("/password/reset");
             }
         }
-    }, [state, router, email]);
+    }, [formState, router, email]);
 
     useEffect(() => {
-        setErrors(state.zodErrors)
-    }, [state])
+        setErrors(formState.zodErrors)
+    }, [formState])
 
 
     return (
@@ -51,21 +52,13 @@ export default function ForgotPassword() {
                             inputName="email"
                             placeholder="Input your Email"
                             required
+                            value={email}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                             error={getErrorField('email', errors)} />
 
                         <SubmitButton pendingText="Processing..." buttonText="GET RESET CODE" />
-						{/* Display feedback message */}
-						{state.error && (
-							<div aria-live="polite" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-								{state.error}
-							</div>
-						)}
-						{state.message && (
-							<div aria-live="polite" className="bg-green-100 border border-green-400 text-green-600 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-								{state.message}
-							</div>
-						)}
+                        {/* Display feedback message */}
+                        <FormMessages formState={formState} errors={errors}/>
                     </form>
                 </div>
             </div>

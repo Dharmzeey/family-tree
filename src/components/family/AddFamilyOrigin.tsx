@@ -16,6 +16,8 @@ export default function AddFamilyOrigin() {
     const [formState, formAction] = useActionState(addFamilyOrigin, initialState)
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
 
+    const [details, setDetails] = useState("");
+
     useEffect(() => {
         setErrors(formState.zodErrors)
     }, [formState])
@@ -38,6 +40,8 @@ export default function AddFamilyOrigin() {
                         inputText="Add Family Orign"
                         inputName="details"
                         inputId="details"
+                        value={details}
+                        onChange={(e) => setDetails(e.target.value)}
                         error={getErrorField('details', errors)}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD FAMILY ORIGIN" />

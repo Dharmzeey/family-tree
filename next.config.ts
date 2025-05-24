@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
             {
                 protocol: "http",
                 hostname: "localhost",
+            },
+            {
+                hostname: "family-record-api.dharmzeey.com",
             }
         ]
     },

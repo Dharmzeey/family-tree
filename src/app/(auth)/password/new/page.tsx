@@ -1,5 +1,6 @@
 'use client';
 
+import FormMessages from "@/components/repsonse/formResponse";
 import { SubmitButton } from "@/components/ui/button";
 import { PasswordField } from "@/components/ui/input";
 import { createNewPassword } from "@/lib/validation/auth";
@@ -14,7 +15,7 @@ const initialState = {
 
 
 export default function CreateNewPassword() {
-    const [state, formAction] = useActionState(createNewPassword, initialState);
+    const [formState, formAction] = useActionState(createNewPassword, initialState);
     const router = useRouter()
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
     const [resetEmail, setResetEmail] = useState<string | null>(null);
@@ -38,11 +39,11 @@ export default function CreateNewPassword() {
 
 
     useEffect(() => {
-        if (state.status === 200) {
+        if (formState.status === 200) {
             // removes both email and token in localStorage
             localStorage.removeItem('resetEmail');
             localStorage.removeItem('resetToken');
-            alert(`${state.message}`)
+            alert(`${formState.message}`)
 
             // toast.success(`${state.message}`, {
             //     position: "top-center",
@@ -51,15 +52,15 @@ export default function CreateNewPassword() {
 
             router.push("/login");
         }
-        else if (state.error === "Password reset session expired or invalid") {
+        else if (formState.error === "Password reset session expired or invalid") {
             // I need to wait a second or 2 here so as to show the prompt
             router.push("/password/forgot")
         }
-    }, [state, router]);
+    }, [formState, router]);
 
     useEffect(() => {
-        setErrors(state.zodErrors)
-    }, [state])
+        setErrors(formState.zodErrors)
+    }, [formState])
 
 
     return (
@@ -91,16 +92,7 @@ export default function CreateNewPassword() {
 
                         <SubmitButton pendingText="Processing..." buttonText="CHANGE PASSWORD" />
                         {/* Display feedback message */}
-                        {state.error && (
-                            <div aria-live="polite" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                                {state.error}
-                            </div>
-                        )}
-                        {state.message && (
-                            <div aria-live="polite" className="bg-green-100 border border-green-400 text-green-600 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-                                {state.message}
-                            </div>
-                        )}
+                        <FormMessages formState={formState} errors={errors} />
                     </form>
                 </div>
             </div>

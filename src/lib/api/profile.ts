@@ -25,7 +25,8 @@ const fetchWithAuth = async (url: string,
             headers
         });
         return handleApiResponse(response);
-    } catch {
+    } catch (error){
+        console.log(error)
         return { error: "A server error occurred", status: 500 };
     }
 };

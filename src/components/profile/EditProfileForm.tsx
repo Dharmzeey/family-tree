@@ -9,6 +9,7 @@ import { EditableInputFIeld, ImageInputField } from "../ui/input";
 import { getErrorField } from "@/utils/errorRenderer";
 import { GetProfileData } from "@/types/profile";
 import Image from "next/image";
+import FormMessages from "../repsonse/formResponse";
 
 const initialState = {
     message: "",
@@ -16,21 +17,21 @@ const initialState = {
 
 
 export default function EditProfileForm() {
-    const [state, formAction] = useActionState(editProfile, initialState);
+    const [formState, formAction] = useActionState(editProfile, initialState);
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
     const [user, setUser] = useState<GetProfileData>()
     const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter();
 
     useEffect(() => {
-        setErrors(state.zodErrors);
+        setErrors(formState.zodErrors);
 
-        if (state.status === 200) {
+        if (formState.status === 200) {
             setTimeout(() => {
                 router.push("/");
             }, 1500); // Redirect after 2 seconds
         }
-    }, [state, router]);
+    }, [formState, router]);
 
     useEffect(() => {
         const user = localStorage.getItem('user')
@@ -41,7 +42,7 @@ export default function EditProfileForm() {
     }, [])
 
     if (loading) return <p>Loading....</p>
-    if (! user) return <p>Please create a user profile</p>
+    if (!user) return <p>Please create a user profile</p>
 
     return (
         <>
@@ -55,7 +56,7 @@ export default function EditProfileForm() {
                         height={150}
                         className="rounded-full w-16 h-16"
                     />
-                    
+
                     <EditableInputFIeld
                         inputFor="first-name"
                         inputText="First Name"
@@ -113,24 +114,7 @@ export default function EditProfileForm() {
                     <SubmitButton pendingText="Editing..." buttonText="Edit Profile" />
 
                     {/* Display feedback message */}
-                    {state.error && (
-                        <div
-                            aria-live="polite"
-                            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4"
-                            role="status"
-                        >
-                            {state.error}
-                        </div>
-                    )}
-                    {state.message && (
-                        <div
-                            aria-live="polite"
-                            className="bg-green-100 border border-green-400 text-green-600 px-4 py-3 rounded mt-2 text-sm mb-4"
-                            role="status"
-                        >
-                            {state.message}
-                        </div>
-                    )}
+                    <FormMessages formState={formState} errors={errors}/>
                 </form>
             </div>
         </>

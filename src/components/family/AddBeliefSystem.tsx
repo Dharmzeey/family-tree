@@ -16,6 +16,8 @@ export default function AddFamilyBeliefSystem() {
     const [formState, formAction] = useActionState(addBeliefSystem, initialState)
     const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
 
+    const [details, setDetails] = useState("");
+
     useEffect(() => {
         setErrors(formState.zodErrors)
     }, [formState])
@@ -37,6 +39,9 @@ export default function AddFamilyBeliefSystem() {
                         inputText="Add Belief System"
                         inputName="details"
                         inputId="details"
+                        // placeholder="Input your Belief System"
+                        value={details}
+                        onChange={(e) => setDetails(e.target.value)}
                         error={getErrorField('details', errors)}
                     />
                     <SubmitButton pendingText="Adding..." buttonText="ADD BELIEF SYSTEM" />

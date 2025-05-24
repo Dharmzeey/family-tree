@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useActionState } from "react";
 import { ZodIssue } from "zod";
 import { getErrorField } from "@/utils/errorRenderer";
+import FormMessages from "@/components/repsonse/formResponse";
 
 
 const initialState = {
@@ -15,22 +16,22 @@ const initialState = {
 };
 
 export default function SignupPage() {
-	const [state, formAction] = useActionState(loginUser, initialState);
+	const [formState, formAction] = useActionState(loginUser, initialState);
 	const [errors, setErrors] = useState<ZodIssue[] | undefined>([]);
 	const [loginEmail, setLoginEmail] = useState<boolean>(true);
+	const [email, setEmail] = useState("");
+	const [phone, setPhone] = useState("");
 	const router = useRouter();
 	useEffect(() => {
-		if (state.status === 200) {
-			// the message will come from authApi through authAction
-			// router.push("/email-verification/confirm");
-			// we will implement verification later, but for now we will just be going straight to home
+		if (formState.status === 200) {
 			router.push("/");
 		}
-	}, [state, router]);
+	}, [formState, router]);
 
 	useEffect(() => {
-		setErrors(state.zodErrors)
-	}, [state])
+		setErrors(formState.zodErrors)
+	}, [formState])
+
 
 	return (
 		<>
@@ -51,6 +52,8 @@ export default function SignupPage() {
 									inputId="email"
 									inputName="email"
 									placeholder="Input your Email"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
 									required
 									error={getErrorField('email', errors)}
 								/>
@@ -62,6 +65,8 @@ export default function SignupPage() {
 									inputId="phone-number"
 									inputName="phone-number"
 									placeholder="Input your Phone Number"
+									value={phone}
+									onChange={(e) => setPhone(e.target.value)}
 									required
 									error={getErrorField('phone_number', errors)}
 								/>
@@ -80,11 +85,7 @@ export default function SignupPage() {
 							buttonText="Login"
 						/>
 						{/* Display feedback message */}
-						{state.error && (
-							<div aria-live="polite" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-2 text-sm mb-4" role="status">
-								{state.error}
-							</div>
-						)}
+						<FormMessages formState={formState} errors={errors} />
 					</form>
 					<div className="flex flex-col items-center gap-1 mt-3">
 						<div className="text-sm text-gray-200 text-center">
