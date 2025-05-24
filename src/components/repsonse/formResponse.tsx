@@ -6,7 +6,7 @@ type FormMessageProps = {
     errors: ZodIssue[] | undefined
 }
 
-export default function FormMessages({formState, errors}: FormMessageProps) {
+export default function FormMessages({formState}: FormMessageProps) {
     return (
         <>
             {

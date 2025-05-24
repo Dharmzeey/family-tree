@@ -82,7 +82,7 @@ export default function ProfileForm() {
                         inputName="lineage-name"
                         placeholder="Input your Lineage Name"
                         value={lineageName}
-                        onChange={(e) => setLastName(e.target.value)}
+                        onChange={(e) => setLineageName(e.target.value)}
                         required
                         error={getErrorField("lineage_name", errors)}
                     />
