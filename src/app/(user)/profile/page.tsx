@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import UserCard from "@/components/profile/userCard";
 
 
-export default function Home() {
+export default function ProfilePage() {
     const { user, setUser } = useUserStore();
     const [error, setError] = useState<string | null>(null);
 
