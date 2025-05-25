@@ -31,6 +31,24 @@ const fetchWithAuth = async (url: string,
     }
 };
 
+// This is used to shuffle between the profile page and the landing page
+export async function userLoggedIn(): Promise<ApiResponse>{
+    try {
+        const token = await fetchAccessTokenCookie();
+        const response = await fetch(VIEW_PROFILE, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token?.value || ""}`,
+            },
+        });
+        return { status: response.status, data: await response.json() };
+    }catch (error) {
+        console.error("Error checking user login status:", error);
+        return { error: "An error occurred while checking login status", status: 500 };
+    }
+}
+
+
 export async function fetchRelationsApi(): Promise<ApiResponse> {
     return fetchWithAuth(FETCH_RELATIONS, { method: "GET", cache: "force-cache" });
 }

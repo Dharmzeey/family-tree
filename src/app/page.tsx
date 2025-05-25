@@ -1,10 +1,17 @@
+import { userLoggedIn } from "@/lib/api/profile";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+    const response = await userLoggedIn()
+    if (response.status !== 401) {
+        redirect('/profile')
+    }
+    
     return (
-        <main className="relative z-10 text-white px-6">
+        <main className="relative z-10 text-white px-6 flex flex-col justify-evenly gap-5 h-full">
             {/* Hero Section */}
-            <section className="max-w-5xl mx-auto pt-4 pb-8 md:pt-20 md:pb-24 lg:pt-20 lg:pb-32 text-center">
+            <section className="max-w-5xl mx-auto pt-4  md:pt-20 md: lg:pt-20 lg: text-center">
                 <h1 className="text-2xl md:text-6xl font-bold leading-tight mb-6 bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
                     Connect With Your Family Like Never Before
                 </h1>
@@ -28,7 +35,7 @@ export default function Home() {
             </section>
 
             {/* Features Section */}
-            <section className="max-w-5xl mx-auto pb-4 md:pb-16 lg:pb-32">
+            <section className="max-w-5xl mx-auto  md: lg:">
                 <div className="grid md:grid-cols-3 gap-8 text-center">
                     <div className="bg-gray-900/50 p-6 rounded-lg backdrop-blur-sm">
                         <h3 className="text-xl font-semibold mb-2">Build Your Family Tree</h3>
@@ -52,7 +59,7 @@ export default function Home() {
             </section>
 
             {/* CTA Section */}
-            <section className="max-w-3xl mx-auto text-center pb-16 lg:pb-32">
+            <section className="max-w-3xl mx-auto text-center  lg:">
                 <h2 className="text-2xl md:text-4xl font-bold mb-6">
                     Ready to Rediscover Your Roots?
                 </h2>

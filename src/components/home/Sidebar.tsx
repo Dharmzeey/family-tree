@@ -21,7 +21,7 @@ export default function Sidebar() {
     const logout = async () => {
         await removeAllTokens();
         localStorage.removeItem('user')
-        router.replace("/login")
+        router.replace("/")
     }
 
     useEffect(() => {
