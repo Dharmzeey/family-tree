@@ -21,9 +21,6 @@ export default function EmailVerification() {
         if (state.status === 200) {
             router.push("/");
         }
-        // else if (state.status === 401) {
-        //   router.push(`/login?callbackUrl=${encodeURIComponent(pathName!)}`);
-        // }
     }, [state, router]);
 
     // Countdown logic

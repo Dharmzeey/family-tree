@@ -4,6 +4,10 @@ import { redirect } from "next/navigation";
 export async function handleApiResponse(response: Response) {
     const responseBody = await response.json();
     if (response.status === 401) redirect("/login")
+    if (response.status === 403 && typeof responseBody.detail === "string") {
+        if (responseBody.detail.includes("Email")) redirect("/email-verification");
+        // if (responseBody.detail.includes("Phone")) redirect("/verify-phone");
+    }
     return {
         data: responseBody.data || null,
         error: responseBody.error || responseBody.detail || handleErrorsResponse(responseBody) || null,
