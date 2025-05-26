@@ -1,6 +1,7 @@
 'use client';
 import RelativeCard from "@/components/home/RelativeCard";
 import UserCard from "@/components/profile/userCard";
+import { Loader } from "@/components/ui/loader";
 import { viewRelativesApi } from "@/lib/api/profile";
 // import useUserStore from "@/stores/userStore";
 import { GetProfileData } from "@/types/profile";
@@ -105,10 +106,10 @@ export default function Relatives() {
 
     return (
         <>
-            <div className="relative h-full overflow-scroll min-w-[1300px] flex justify-center items-center content-center flex-wrap gap-3 " ref={userCardRef}>
+            <div className="relative h-full  min-w-[1300px] flex justify-center items-center content-center flex-wrap gap-3 " ref={userCardRef}>
                 {
                     loading ? (
-                        <h1>Loading...</h1>
+                        <Loader/>
                     ) :
                         !user ?
                             <b>{error}</b>

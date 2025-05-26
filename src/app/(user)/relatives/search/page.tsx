@@ -2,6 +2,7 @@
 
 import HandleRelativeSearch from "@/components/home/RelativeSearch";
 import SearchRelativeCard from "@/components/home/SearchRelativeCard";
+import { DotsLoader } from "@/components/ui/loader";
 import { searchRelativeApi } from "@/lib/api/profile";
 import { GetProfileData } from "@/types/profile";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -103,7 +104,7 @@ function PerformSearch() {
                 <div className="flex flex-wrap gap-4 px-8 mt-5">
                     {
                         isLoading ? (
-                            <h1>Loading...</h1> // Show loading indicator
+                            <DotsLoader />
                         ) : searchResult && searchResult.length > 0 ? (
                             searchResult.map((result) => (
                                 <SearchRelativeCard
@@ -145,7 +146,7 @@ function PerformSearch() {
 
 export default function SearchRelative() {
     return (
-        <Suspense fallback={<h1>Loading...</h1>}>
+        <Suspense fallback={<DotsLoader />}>
             <PerformSearch />
         </Suspense>
     )

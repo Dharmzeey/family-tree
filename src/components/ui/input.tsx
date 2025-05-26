@@ -159,7 +159,7 @@ function EditableTextAreaFIeld(inputProp: EditTextAreaProp) {
                     // placeholder={inputProp.placeholder}
                     value={inputProp.value}
                     onChange={inputProp.onChange}
-                    rows={7}
+                    rows={4}
                 ></textarea>
                 {/* Render error message if it exists */}
                 {inputProp.error && <p style={{ color: 'red' }}>{inputProp.error}</p>}

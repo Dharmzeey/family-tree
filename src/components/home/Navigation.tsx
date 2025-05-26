@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FaHome, FaBell, FaSearch, FaUserPlus, FaAddressBook } from "react-icons/fa";
 import { FaUserPen, FaCircleInfo, FaRightFromBracket } from "react-icons/fa6";
+import { Loader } from "../ui/loader";
 
 export default function Navigation() {
 
@@ -40,9 +41,7 @@ export default function Navigation() {
         }
     }, [])
 
-    if (!loggedIn) {
-        return <div className="flex justify-center items-center h-screen text-white">Loading...</div>;
-    }
+    if (!loggedIn) return <Loader/>
 
     return (
         <>

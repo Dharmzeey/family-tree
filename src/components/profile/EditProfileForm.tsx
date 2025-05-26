@@ -5,11 +5,12 @@ import { useActionState, useEffect, useState } from "react";
 import { ZodIssue } from "zod";
 import { useRouter } from "next/navigation";
 import { SubmitButton } from "../ui/button";
-import { EditableInputFIeld, ImageInputField } from "../ui/input";
+import { EditableInputFIeld, EditableTextAreaFIeld, ImageInputField } from "../ui/input";
 import { getErrorField } from "@/utils/errorRenderer";
 import { GetProfileData } from "@/types/profile";
 import Image from "next/image";
 import FormMessages from "../repsonse/formResponse";
+import { Loader } from "../ui/loader";
 
 const initialState = {
     message: "",
@@ -41,7 +42,7 @@ export default function EditProfileForm() {
         setLoading(false)
     }, [])
 
-    if (loading) return <p>Loading....</p>
+    if (loading) return <Loader />
     if (!user) return <p>Please create a user profile</p>
 
     return (
@@ -100,6 +101,14 @@ export default function EditProfileForm() {
                         required
                         error={getErrorField("lineage_name", errors)}
                     />
+                    <EditableTextAreaFIeld
+                        inputFor="about"
+                        inputText="About"
+                        inputId="about"
+                        inputName="about"
+                        defaultValue={user!.about}
+                        error={getErrorField("about", errors)}
+                    />
 
                     <ImageInputField
                         inputFor="picture"
@@ -114,7 +123,7 @@ export default function EditProfileForm() {
                     <SubmitButton pendingText="Editing..." buttonText="Edit Profile" />
 
                     {/* Display feedback message */}
-                    <FormMessages formState={formState} errors={errors}/>
+                    <FormMessages formState={formState} errors={errors} />
                 </form>
             </div>
         </>

@@ -8,10 +8,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navigation from "@/components/home/Navigation";
+import { DotsLoader } from "@/components/ui/loader";
 
 export default function ProfilePage() {
     const { user, setUser } = useUserStore();
     const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -38,28 +40,51 @@ export default function ProfilePage() {
     }
 
     if (!user) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return <DotsLoader/>
     }
 
     const hasImage = user?.picture && !user.picture.includes("default.jpg");
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 p-4 md:p-8">
+        <div className="min-h-screen p-4 md:p-8">
             <div className="max-w-4xl mx-auto">
                 {/* Profile Header */}
                 <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/10">
                     <div className="flex flex-col md:flex-row gap-6 items-center">
                         {/* Avatar Section */}
-                        <div className="relative group">
-                            <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-md group-hover:blur-lg transition-all duration-300"></div>
+                        <div className="relative ">
+                            <div className="absolute inset-0 bg-blue-500/20 rounded-full transition-all duration-300"></div>
                             {hasImage ? (
-                                <Image
-                                    src={user.picture}
-                                    alt={`${user.first_name}'s profile`}
-                                    width={150}
-                                    height={150}
-                                    className="relative z-10 rounded-full w-32 h-32 object-cover border-4 border-white/20 hover:border-blue-400 transition-all"
-                                />
+                                <>
+                                    <Image
+                                        src={user.picture}
+                                        alt={`${user.first_name}'s profile`}
+                                        width={150}
+                                        height={150}
+                                        className="relative z-10 rounded-full w-32 h-32 object-cover border-4 border-white/20 hover:border-blue-400 transition-all cursor-pointer"
+                                        // onClick={() => setShowModal(true)}
+                                    />
+                                    {showModal && (
+                                        <div className="fixed top-[40vh] lg:top-[40vh] inset-0 flex z-50 items-center justify-center bg-black/70">
+                                            <div className="relative z-50">
+                                                <button
+                                                    className="absolute top-2 right-2 bg-black/60 text-white rounded-full p-2 hover:bg-black/80"
+                                                    onClick={() => setShowModal(false)}
+                                                    aria-label="Close"
+                                                >
+                                                    &times;
+                                                </button>
+                                                <Image
+                                                    src={user.picture}
+                                                    alt={`${user.first_name}'s profile full size`}
+                                                    width={500}
+                                                    height={500}
+                                                    className="rounded-2xl max-w-[90vw] max-h-[80vh] object-contain"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
                             ) : (
                                 <div className="relative z-10 rounded-full w-32 h-32 bg-gray-700 flex items-center justify-center text-4xl font-bold text-white border-4 border-white/20">
                                     {user.first_name.charAt(0)}
@@ -101,7 +126,7 @@ export default function ProfilePage() {
                     <h2 className="text-xl font-semibold text-white mb-4">About</h2>
                     <p className="text-gray-300">
                         {/* Add your about content here */}
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.
+                        {user.about}
                     </p>
                 </div>
                 <Navigation />

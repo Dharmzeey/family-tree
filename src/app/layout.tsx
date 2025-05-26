@@ -28,7 +28,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased text-sm`}
             >
-                <div className="h-screen bg-[#091325] relative overflow-hidden">
+                <div className="h-screen bg-[#091325] relative bg-gradient-to-br from-gray-900 to-blue-900 overflow-auto"> {/* I can toggle the brightness here by removing and the bg gradient */}
                     <BackgroundGradient />
                     {children}
                 </div>

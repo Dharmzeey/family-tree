@@ -59,6 +59,7 @@ export async function createProfileApi(data: SendProfileData): Promise<ApiRespon
     formData.append('last_name', data.last_name);
     formData.append('lineage_name', data.lineage_name);
     formData.append('other_name', data.other_name);
+    formData.append('about', data.about);
     formData.append('picture', data.picture);
 
     return fetchWithAuth(CREATE_PROFILE, { method: "POST", body: formData });
@@ -70,6 +71,7 @@ export async function editProfileApi(data: SendProfileData): Promise<ApiResponse
     formData.append('last_name', data.last_name);
     formData.append('lineage_name', data.lineage_name);
     formData.append('other_name', data.other_name);
+    formData.append('about', data.about);
     if (data.picture && data.picture.size > 0) {
         formData.append('picture', data.picture);
     }

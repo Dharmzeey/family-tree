@@ -5,7 +5,7 @@ import { useActionState, useEffect, useState } from "react";
 import { ZodIssue } from "zod";
 import { useRouter } from "next/navigation";
 import { SubmitButton } from "../ui/button";
-import { EditableInputFIeld, ImageInputField } from "../ui/input";
+import { EditableInputFIeld, EditableTextAreaFIeld, ImageInputField } from "../ui/input";
 import { getErrorField } from "@/utils/errorRenderer";
 import { goHome1500ms } from "@/utils/delayTimer";
 import FormMessages from "../repsonse/formResponse";
@@ -22,6 +22,7 @@ export default function ProfileForm() {
     const [lastName, setLastName] = useState("");
     const [otherName, setOtherName] = useState("");
     const [lineageName, setLineageName] = useState("");
+    const [about, setAbout] = useState("");
 
     const router = useRouter();
 
@@ -85,6 +86,16 @@ export default function ProfileForm() {
                         onChange={(e) => setLineageName(e.target.value)}
                         required
                         error={getErrorField("lineage_name", errors)}
+                    />
+
+                    <EditableTextAreaFIeld
+                        inputFor="about"
+                        inputText="About"
+                        inputId="about"
+                        inputName="about"
+                        value={about}
+                        onChange={(e) => setAbout(e.target.value)}
+                        error={getErrorField("about", errors)}
                     />
 
                     <ImageInputField

@@ -12,6 +12,7 @@ export async function createProfile(
         last_name: z.string().nonempty("Last name cannot be empty"),
         lineage_name: z.string().nonempty("Lineage name cannot be empty"),
         other_name: z.string(),
+        about: z.string().nonempty('About cannot be empty'),
         picture: z.instanceof(File).refine(file => file.size <= 850 * 1024, "Picture must be less than 800kb")
     });
 
@@ -20,6 +21,7 @@ export async function createProfile(
         last_name: formData.get("last-name"),
         lineage_name: formData.get("lineage-name"),
         other_name: formData.get("other-name"),
+        about: formData.get("about"),
         picture: formData.get("picture")
     })
 
@@ -42,6 +44,7 @@ export async function editProfile(
         last_name: z.string().nonempty("Last name cannot be empty"),
         lineage_name: z.string().nonempty("Lineage name cannot be empty"),
         other_name: z.string(),
+        about: z.string().nonempty('About cannot be empty'),
         picture: z.instanceof(File).refine(file => file.size <= 850 * 1024, "Picture must be less than 800kb")
     });
 
@@ -50,6 +53,7 @@ export async function editProfile(
         last_name: formData.get("last-name"),
         lineage_name: formData.get("lineage-name"),
         other_name: formData.get("other-name"),
+        about: formData.get("about"),
         picture: formData.get("picture")
     })
 

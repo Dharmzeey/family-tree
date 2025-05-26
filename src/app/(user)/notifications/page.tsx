@@ -6,6 +6,7 @@ import { getNotificationsApi, processNotificationApi } from "@/lib/api/profile"
 import { NotificationData } from "@/types/profile"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { Loader } from "@/components/ui/loader"
 
 export default function NotificationPage() {
     const [notifications, setNotifications] = useState<NotificationData[]>([])
@@ -43,12 +44,12 @@ export default function NotificationPage() {
         }
     }
 
-    if (loading) return <div className="flex justify-center items-center">Loading...</div>
+    if (loading) return <Loader />
 
     return (
         <>
             {error ? (
-                <h1 className="flex justify-center items-center">{error}</h1>
+                <h1 className="mt-10 flex justify-center items-center">{error}</h1>
             ) : (
                 <div className="mt-10">
                     <h1 className="text-center font-bold text-lg px-3">Bond Notification requests</h1>

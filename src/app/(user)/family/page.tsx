@@ -19,6 +19,7 @@ import UpdateEulogy from "@/components/family/UpdateEulogy";
 import UpdateOtherInformation from "@/components/family/UpdateOtherInfo";
 import UpdateFamilyHead from "@/components/family/UpdateFamilyHead";
 import Link from "next/link";
+import { Loader } from "@/components/ui/loader";
 
 export default function FamilyPage() {
     const [roles, setRoles] = useState<{ is_author: boolean, is_handler: boolean }>({ is_author: false, is_handler: false });
@@ -76,12 +77,12 @@ export default function FamilyPage() {
     }
 
 
-    if (loading) return <p className="flex justify-center items-center">Loading family details...</p>;
+    if (loading) return <Loader headerText="Loading Family data ..."/>;
     if (error) return  <div className="flex flex-col gap-2 justify-center items-center">{error} <p><Link href="/" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"> Go Home </Link></p>  </div>;
     if (!family) return <p className="flex justify-center items-center">No family data available.</p>;
 
     return (
-        <div className="p-6 w-[90%] mx-auto shadow-lg rounded-lg  z-30">
+        <div className="p-6 w-[90%] mx-auto shadow-lg rounded-lg z-30">
             <h1 className="text-2xl font-bold mb-4 text-center">The family of {family.name}</h1>
             <p className="font-bold text-xl text-gray-200">Family ID: {family.id}</p>
             <p className="font-bold text-xl text-gray-200">Author: {family.author}</p>

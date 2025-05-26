@@ -3,6 +3,7 @@ interface BaseProfileData  {
     last_name: string;
     first_name: string;
     other_name: string;
+    about: string;
 };
 
 
